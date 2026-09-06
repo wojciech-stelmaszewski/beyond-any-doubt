@@ -15,7 +15,16 @@ const formatDate = (date: Date) =>
   date.toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" });
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  card={`/og/${post.id}.png`}
+  article={{
+    published: post.data.published,
+    updated: post.data.updated,
+    tags: post.data.tags,
+  }}
+>
   <article>
     <h1>{post.data.title}</h1>
     <p class="meta">

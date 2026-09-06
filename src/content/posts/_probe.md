@@ -1,9 +1,8 @@
 ---
 title: Sensitive dependence, and what a solver can promise
 description: >-
-  A benchmark post that exercises the whole pipeline at once: callouts, numbered
-  equations with cross-references, four interactive 2D charts, three rotatable
-  WebGL scenes, and a point cloud of four hundred thousand states.
+  Where a differential equation stops being predictable, worked through with
+  numbered proofs, interactive charts and an attractor you can turn by hand.
 published: 2026-09-06
 tags: ["dynamical systems", "numerical analysis"]
 ---

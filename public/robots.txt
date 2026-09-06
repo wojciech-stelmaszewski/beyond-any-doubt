@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://beyond-any-doubt.org/sitemap-index.xml

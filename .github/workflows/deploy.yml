@@ -33,8 +33,8 @@ jobs:
 
       - run: npm run build
 
-      # public/CNAME is copied into dist by Astro, which is what keeps the
-      # custom domain bound after each deploy.
+      # The custom domain lives in the repository's Pages settings, not in a
+      # CNAME file: when publishing from a workflow, GitHub ignores that file.
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist

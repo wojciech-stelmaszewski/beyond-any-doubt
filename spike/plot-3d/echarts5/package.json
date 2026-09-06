@@ -1,0 +1,1 @@
+{"name":"echarts5-probe","private":true,"type":"module","dependencies":{"echarts":"^5.6.0","echarts-gl":"^2.1.0"}}

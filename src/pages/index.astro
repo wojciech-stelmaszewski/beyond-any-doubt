@@ -1,0 +1,36 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
+);
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" });
+---
+
+<BaseLayout
+  title="Beyond Any Doubt"
+  description="Advanced mathematics, worked through in full."
+>
+  <h1>Beyond Any Doubt</h1>
+  <p class="meta">Advanced mathematics, worked through in full.</p>
+  <hr />
+
+  <ul style="list-style: none; padding: 0;">
+    {
+      posts.map((post) => (
+        <li style="margin-bottom: 1.75rem;">
+          <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+          <div class="meta">
+            <time datetime={post.data.published.toISOString()}>
+              {formatDate(post.data.published)}
+            </time>
+          </div>
+          <p style="margin: 0.35rem 0 0;">{post.data.description}</p>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

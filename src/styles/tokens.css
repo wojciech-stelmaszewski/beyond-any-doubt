@@ -1,0 +1,109 @@
+/*
+ * "Ink & Proof" design tokens.
+ *
+ * Contrast ratios are recorded in docs/plan-2026-09-04_11-49.md and were
+ * verified against WCAG 2.2; do not change a value without rechecking it.
+ */
+
+:root {
+  color-scheme: light;
+
+  --paper: #faf8f4;
+  --paper-raised: #ffffff;
+  --paper-sunken: #f0ece4;
+  --rule: #dcd6ca;
+  --rule-strong: #beb6a6;
+
+  --ink: #16181d;
+  --ink-2: #444a54;
+  --ink-3: #656b75;
+
+  --accent: #2740b0;
+  --accent-hover: #1b2e86;
+  --accent-tint: #eaedfb;
+  --visited: #6b3fa0;
+
+  --definition: #0f6e63;
+  --theorem: #6b3fa0;
+  --conjecture: #8f5a08;
+  --counterexample: #a32319;
+  --mark: #fbefc0;
+
+  --series-1: #0072b2;
+  --series-2: #d55e00;
+  --series-3: #009e73;
+  --series-4: #b8608f;
+  --series-5: #16181d;
+
+  /*
+   * Cividis, for continuous quantities. Categorical data uses the series ramp
+   * above; this one encodes magnitude, and is colourblind-safe by construction.
+   */
+  --seq-0: #00204c;
+  --seq-1: #0a3268;
+  --seq-2: #38526e;
+  --seq-3: #5b656f;
+  --seq-4: #787571;
+  --seq-5: #99876b;
+  --seq-6: #bd9b60;
+  --seq-7: #e2b14e;
+  --seq-8: #ffea46;
+
+  /* "STIX Fallback" is Georgia with STIX's metrics; see fonts.css. */
+  --font-body: "STIX Two Text", "STIX Fallback", Georgia, "Times New Roman", serif;
+  --font-ui: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Menlo, monospace;
+
+  /*
+   * The width of the text itself, gutters excluded. At the body face this comes
+   * out around 72 characters a line, inside the 66-75 that the reading research
+   * behind this palette settles on. Widening it would cost comprehension, so
+   * the page uses a larger type size on large screens instead: the column grows
+   * in pixels while the line stays the same length in characters.
+   */
+  --measure: 62ch;
+  --gutter: 1.5rem;
+  --step: 0.25rem;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #0f1216;
+  --paper-raised: #161a20;
+  --paper-sunken: #090b0e;
+  --rule: #282e38;
+  --rule-strong: #3c4450;
+
+  --ink: #e6e3dc;
+  --ink-2: #a9b0ba;
+  --ink-3: #868d98;
+
+  --accent: #93aeff;
+  --accent-hover: #b7c8ff;
+  --accent-tint: #171e38;
+  --visited: #c4a2ee;
+
+  --definition: #4fc8b6;
+  --theorem: #c4a2ee;
+  --conjecture: #e3a84c;
+  --counterexample: #f0897f;
+  --mark: #3b3416;
+
+  --series-1: #63b3e8;
+  --series-2: #f08a4b;
+  --series-3: #43c89c;
+  --series-4: #e39ac4;
+  --series-5: #e6e3dc;
+
+  /* Cividis again, but truncated at the dark end so it stays legible on slate. */
+  --seq-0: #42586f;
+  --seq-1: #5a646f;
+  --seq-2: #6f7070;
+  --seq-3: #857c6f;
+  --seq-4: #9d896a;
+  --seq-5: #b79863;
+  --seq-6: #d2a758;
+  --seq-7: #ecbb4a;
+  --seq-8: #ffea46;
+}

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Beyond Any Doubt — "Ink &amp; Proof" palette preview</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+  .theme-light {
+    --paper:#FAF8F4; --paper-raised:#FFFFFF; --paper-sunken:#F0ECE4;
+    --rule:#DCD6CA; --rule-strong:#BEB6A6;
+    --ink:#16181D; --ink-2:#444A54; --ink-3:#656B75;
+    --accent:#2740B0; --accent-hover:#1B2E86; --accent-tint:#EAEDFB; --visited:#6B3FA0;
+    --definition:#0F6E63; --theorem:#6B3FA0; --conjecture:#8F5A08; --counterexample:#A32319;
+    --mark:#FBEFC0;
+    --s1:#0072B2; --s2:#D55E00; --s3:#009E73; --s4:#B8608F; --s5:#16181D;
+  }
+  .theme-dark {
+    --paper:#0F1216; --paper-raised:#161A20; --paper-sunken:#090B0E;
+    --rule:#282E38; --rule-strong:#3C4450;
+    --ink:#E6E3DC; --ink-2:#A9B0BA; --ink-3:#868D98;
+    --accent:#93AEFF; --accent-hover:#B7C8FF; --accent-tint:#171E38; --visited:#C4A2EE;
+    --definition:#4FC8B6; --theorem:#C4A2EE; --conjecture:#E3A84C; --counterexample:#F0897F;
+    --mark:#3B3416;
+    --s1:#63B3E8; --s2:#F08A4B; --s3:#43C89C; --s4:#E39AC4; --s5:#E6E3DC;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+         background:#2b2b2b; display:grid; grid-template-columns:1fr; }
+  body.split { grid-template-columns:1fr 1fr; }
+  .pane { background:var(--paper); color:var(--ink); padding:18px 22px 20px;
+          display:grid; grid-template-columns:1fr 1fr; gap:0 26px;
+          grid-template-areas:"head head" "left right"; align-content:start; }
+  .pane > .head { grid-area:head; }
+  .pane > .col-l { grid-area:left; min-width:0; }
+  .pane > .col-r { grid-area:right; min-width:0; }
+  .pane-label { font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+                color:var(--ink-3); margin:0 0 14px; }
+  h1 { font-family:"Source Serif 4",Georgia,serif; font-size:23px; line-height:1.2;
+       margin:0 0 3px; font-weight:600; letter-spacing:-.01em; }
+  .sub { color:var(--ink-2); font-size:12.5px; margin:0 0 13px; }
+  h2 { font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
+       margin:13px 0 8px; font-weight:600; }
+  h2:first-child { margin-top:0; }
+  .prose { font-family:"Source Serif 4",Georgia,serif; font-size:14.5px; line-height:1.55;
+           color:var(--ink); }
+  .prose a { color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px; }
+  mark { background:var(--mark); color:var(--ink); padding:0 2px; }
+
+  .swatches { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+  .sw { border-radius:6px; overflow:hidden; border:1px solid var(--rule); }
+  .sw .chip { height:34px; }
+  .sw .meta { padding:6px 8px; background:var(--paper-raised); }
+  .sw .name { font-size:9px; font-weight:600; color:var(--ink-2); display:block;
+              white-space:nowrap; }
+  .sw .hex  { font-family:"JetBrains Mono",ui-monospace,monospace; font-size:10px; color:var(--ink-3); }
+
+  .callout { border-left:3px solid var(--c); background:var(--paper-raised);
+             border-radius:0 6px 6px 0; padding:9px 13px; margin:0 0 7px;
+             border-top:1px solid var(--rule); border-right:1px solid var(--rule);
+             border-bottom:1px solid var(--rule); }
+  .callout .tag { font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+                  font-weight:700; color:var(--c); display:flex; align-items:center; gap:6px; }
+  .callout .body { font-family:"Source Serif 4",Georgia,serif; font-size:15px;
+                   line-height:1.55; color:var(--ink); margin-top:5px; }
+  .glyph { font-family:ui-monospace,monospace; font-size:11px; }
+
+  .eq { background:var(--paper-raised); border:1px solid var(--rule); border-radius:8px;
+        padding:11px 14px; margin-bottom:8px; }
+  .eq .num { float:right; color:var(--ink-3); font-size:13px;
+             font-family:"JetBrains Mono",ui-monospace,monospace; }
+
+  figure { margin:0; background:var(--paper-raised); border:1px solid var(--rule);
+           border-radius:8px; padding:12px 14px 9px; }
+  figcaption { font-size:12px; color:var(--ink-2); margin-top:8px; line-height:1.5; }
+  .legend { display:flex; flex-wrap:wrap; gap:12px; margin-top:10px; }
+  .legend span { font-size:11px; color:var(--ink-2); display:flex; align-items:center; gap:5px; }
+  .legend i { width:16px; height:2.5px; border-radius:2px; display:inline-block; }
+
+  code { font-family:"JetBrains Mono",ui-monospace,monospace; font-size:13px;
+         background:var(--paper-sunken); padding:1px 5px; border-radius:4px; color:var(--ink-2); }
+</style>
+</head>
+<body>
+
+<template id="pane-tpl">
+  <div class="head">
+    <p class="pane-label" data-slot="label"></p>
+    <h1>Beyond Any Doubt</h1>
+    <p class="sub">“Ink &amp; Proof” — a palette derived from reading research, with every ratio computed.</p>
+  </div>
+
+  <div class="col-l">
+    <h2>Surfaces &amp; ink</h2>
+    <div class="swatches" data-swatches="surface"></div>
+
+    <h2>Accent &amp; semantics</h2>
+    <div class="swatches" data-swatches="accent"></div>
+
+    <h2>Prose</h2>
+    <div class="prose">
+      Let \(f:\mathbb{R}\to\mathbb{R}\) be continuous. The claim is not that the bound is
+      <mark>tight</mark>, but that it holds <a href="#">beyond any doubt</a> — and the proof is
+      short enough to keep in working memory.
+    </div>
+
+    <h2>Display mathematics</h2>
+    <div class="eq">
+      <span class="num">(3.7)</span>
+      \[ \zeta(s)=\prod_{p}\frac{1}{1-p^{-s}} \]
+    </div>
+  </div>
+
+  <div class="col-r">
+    <h2>Structural callouts</h2>
+    <div class="callout" style="--c:var(--definition)">
+      <div class="tag"><span class="glyph">[D]</span> Definition 2.1</div>
+      <div class="body">A sequence \((a_n)\) is Cauchy if \(\forall \varepsilon&gt;0\ \exists N\ \forall m,n&gt;N: |a_m-a_n|&lt;\varepsilon\).</div>
+    </div>
+    <div class="callout" style="--c:var(--theorem)">
+      <div class="tag"><span class="glyph">[T]</span> Theorem 2.4</div>
+      <div class="body">Every Cauchy sequence in \(\mathbb{R}\) converges. <span style="float:right">∎</span></div>
+    </div>
+    <div class="callout" style="--c:var(--conjecture)">
+      <div class="tag"><span class="glyph">[?]</span> Conjecture</div>
+      <div class="body">The bound \(O(n\log n)\) is optimal for this class of inputs.</div>
+    </div>
+    <div class="callout" style="--c:var(--counterexample)">
+      <div class="tag"><span class="glyph">[!]</span> Counterexample</div>
+      <div class="body">Take \(a_n = (-1)^n\); bounded, yet not convergent.</div>
+    </div>
+
+    <h2>Chart series <code>(5 max)</code></h2>
+    <figure>
+      <svg viewBox="0 0 560 180" width="100%" data-chart></svg>
+      <div class="legend" data-legend></div>
+      <figcaption>Series are separated by hue <em>and</em> dash pattern — colour is never the only cue.</figcaption>
+    </figure>
+  </div>
+</template>
+
+<script>
+const SURFACE = [
+  ["paper","--paper"],["raised","--paper-raised"],["sunken","--paper-sunken"],
+  ["ink","--ink"],["ink-2","--ink-2"]
+];
+const ACCENT = [
+  ["accent","--accent"],["definition","--definition"],["theorem","--theorem"],
+  ["conjecture","--conjecture"],["counterexample","--counterexample"]
+];
+const SERIES = [
+  ["Baseline","--s1","none"],["Method A","--s2","6 3"],["Method B","--s3","2 3"],
+  ["Method C","--s4","9 3 2 3"],["Bound","--s5","1 4"]
+];
+
+function swatchHTML(list, cs) {
+  return list.map(([name, v]) => {
+    const hex = cs.getPropertyValue(v).trim().toUpperCase();
+    return `<div class="sw"><div class="chip" style="background:${hex}"></div>
+      <div class="meta"><span class="name">${name}</span><span class="hex">${hex}</span></div></div>`;
+  }).join("");
+}
+
+function curve(i, w, h) {
+  const pts = [];
+  for (let x = 0; x <= 40; x++) {
+    const t = x / 40;
+    const y = Math.exp(-(1.1 + i * 1.15) * t) * (0.96 - i * 0.03) + 0.02;
+    pts.push([28 + t * (w - 44), 12 + (1 - y) * (h - 42)]);
+  }
+  return "M" + pts.map(p => p.map(n => n.toFixed(1)).join(",")).join("L");
+}
+
+function buildPane(themeClass, label) {
+  const pane = document.createElement("div");
+  pane.className = "pane " + themeClass;
+  pane.appendChild(document.getElementById("pane-tpl").content.cloneNode(true));
+  document.body.appendChild(pane);
+  pane.querySelector('[data-slot="label"]').textContent = label;
+
+  const cs = getComputedStyle(pane);
+  pane.querySelector('[data-swatches="surface"]').innerHTML = swatchHTML(SURFACE, cs);
+  pane.querySelector('[data-swatches="accent"]').innerHTML  = swatchHTML(ACCENT, cs);
+
+  const svg = pane.querySelector("[data-chart]");
+  const W = 560, H = 180, rule = cs.getPropertyValue("--rule").trim();
+  let out = "";
+  for (let g = 0; g <= 4; g++) {
+    const y = 12 + g * (H - 42) / 4;
+    out += `<line x1="28" x2="${W - 16}" y1="${y}" y2="${y}" stroke="${rule}" stroke-width="1"/>`;
+  }
+  SERIES.forEach(([, v, dash], i) => {
+    const c = cs.getPropertyValue(v).trim();
+    out += `<path d="${curve(i, W, H)}" fill="none" stroke="${c}" stroke-width="2.4"
+             stroke-linecap="round" ${dash !== "none" ? `stroke-dasharray="${dash}"` : ""}/>`;
+  });
+  svg.innerHTML = out;
+
+  pane.querySelector("[data-legend]").innerHTML = SERIES.map(([n, v]) =>
+    `<span><i style="background:${cs.getPropertyValue(v).trim()}"></i>${n}</span>`).join("");
+}
+
+const only = new URLSearchParams(location.search).get("theme");
+if (!document.querySelector(".pane")) {
+  if (only === "light") {
+    buildPane("theme-light", "Light theme — default");
+  } else if (only === "dark") {
+    buildPane("theme-dark", "Dark theme — opt-in");
+  } else {
+    document.body.classList.add("split");
+    buildPane("theme-light", "Light theme — default");
+    buildPane("theme-dark",  "Dark theme — opt-in");
+  }
+}
+
+window.addEventListener("load", () => {
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: "\\[", right: "\\]", display: true },
+      { left: "\\(", right: "\\)", display: false }
+    ],
+    throwOnError: false
+  });
+  document.title += " — ready";
+});
+</script>
+</body>
+</html>

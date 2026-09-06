@@ -1,0 +1,380 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  /*
+   * Type grows with the viewport, from 17px on a phone to 21px on a desktop.
+   * Because --measure is expressed in ch, the column widens with it and the
+   * line stays the same length in characters: the page fills a large screen
+   * without pushing past the measure that makes it readable.
+   */
+  font-size: clamp(1.0625rem, 0.95rem + 0.42vw, 1.3125rem);
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+}
+
+/*
+ * --measure is the text, so the gutters are added outside it rather than
+ * eaten out of it by border-box.
+ */
+.shell {
+  max-width: calc(var(--measure) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding: calc(var(--step) * 12) var(--gutter);
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+a:visited {
+  color: var(--visited);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+code,
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+pre {
+  background: var(--paper-sunken);
+  padding: calc(var(--step) * 4);
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: calc(var(--step) * 10) 0;
+}
+
+.meta {
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--ink-2);
+}
+
+/*
+ * Display maths is a block of its own, so a wide equation is bounded by the
+ * column and can scroll inside it. The scrolling itself is MathJax's, set up by
+ * displayOverflow in the typesetting step; overriding overflow here would undo
+ * the min-width reset that makes it work.
+ */
+.math-display {
+  display: block;
+  max-width: 100%;
+}
+
+mjx-container[display="true"] {
+  padding-block: calc(var(--step) * 2);
+}
+
+/*
+ * Figures break out of the text column: a chart needs more width than a
+ * comfortable line length allows.
+ */
+figure.plot {
+  margin: calc(var(--step) * 11) 0;
+  width: min(94vw, 62rem);
+  margin-inline: calc(50% - min(47vw, 31rem));
+}
+
+/*
+ * A 2D figure. Panning is a drag, so the browser's own touch scrolling has to
+ * be handed over to the chart inside the frame.
+ */
+.chart2d {
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  overflow: hidden;
+  aspect-ratio: 1 / 0.56;
+  touch-action: none;
+}
+
+.chart2d.is-live {
+  aspect-ratio: auto;
+  cursor: crosshair;
+}
+
+.chart2d.is-panning {
+  cursor: grabbing;
+}
+
+.chart2d svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--step) * 2) calc(var(--step) * 6);
+  list-style: none;
+  margin: calc(var(--step) * 3) 0 0;
+  padding: 0;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+}
+
+.chart-legend li {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--step) * 2);
+}
+
+.chart-legend svg {
+  width: 34px;
+  height: 12px;
+  flex: none;
+}
+
+/*
+ * A WebGL figure. The canvas and the label overlay are stacked, so the DOM
+ * labels sit over the scene while still using the page's typeface.
+ */
+.scene3d {
+  position: relative;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  overflow: hidden;
+  aspect-ratio: 1 / 0.62;
+  touch-action: none;
+}
+
+.scene3d.is-live {
+  cursor: grab;
+  aspect-ratio: auto;
+}
+
+.scene3d.is-live:active {
+  cursor: grabbing;
+}
+
+.scene3d canvas {
+  display: block;
+}
+
+.scene3d-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.scene3d-tick,
+.scene3d-axis {
+  font-family: var(--font-ui);
+  color: var(--ink-3);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.scene3d-tick {
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.scene3d-axis {
+  font-size: 0.8125rem;
+  font-style: italic;
+  color: var(--ink-2);
+}
+
+.figure-fallback {
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  color: var(--ink-3);
+  text-align: center;
+  margin: 0;
+  padding: calc(var(--step) * 12) var(--step);
+}
+
+.is-live .figure-fallback {
+  display: none;
+}
+
+/* The hint is only true once the figure is interactive, so it waits for that. */
+.figure-hint {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-3);
+  margin: calc(var(--step) * 2) 0 0;
+  visibility: hidden;
+}
+
+.is-live + .figure-hint,
+.chart-legend + .figure-hint {
+  visibility: visible;
+}
+
+figure.plot figcaption {
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin-top: calc(var(--step) * 3);
+  max-width: 46rem;
+}
+
+figure.plot figcaption b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/*
+ * The theme switch sits above the column rather than floating over it, so it
+ * never covers a figure and never has to be dodged on a narrow screen.
+ */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--step) * 2);
+  margin-left: auto;
+  margin-bottom: calc(var(--step) * 6);
+  padding: calc(var(--step) * 1.5) calc(var(--step) * 3);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  color: var(--ink-2);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  border-color: var(--rule-strong);
+  color: var(--ink);
+}
+
+.theme-toggle svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+
+/* Each icon shows the theme the button switches to, not the current one. */
+.theme-toggle .icon-sun,
+[data-theme="dark"] .theme-toggle .icon-moon {
+  display: none;
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
+}
+
+/*
+ * The browser's default highlight is a saturated yellow that ignores the theme
+ * and burns a hole in dark prose. The token is tuned per theme instead.
+ */
+mark {
+  background: var(--mark);
+  color: inherit;
+  padding: 0 0.15em;
+  border-radius: 2px;
+}
+
+/*
+ * Structural callouts. The left rule carries the kind's colour and the sigil
+ * repeats it as a character, so the distinction survives colour blindness,
+ * greyscale printing and a washed-out projector.
+ */
+.callout {
+  --callout-colour: var(--ink-2);
+
+  border-left: 3px solid var(--callout-colour);
+  background: var(--paper-raised);
+  border-radius: 0 4px 4px 0;
+  padding: calc(var(--step) * 4) calc(var(--step) * 5);
+  margin: calc(var(--step) * 7) 0;
+}
+
+.callout.is-definition {
+  --callout-colour: var(--definition);
+}
+
+.callout.is-theorem {
+  --callout-colour: var(--theorem);
+}
+
+.callout.is-conjecture {
+  --callout-colour: var(--conjecture);
+}
+
+.callout.is-counterexample {
+  --callout-colour: var(--counterexample);
+}
+
+.callout-label {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--step) * 2);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--callout-colour);
+  margin: 0 0 calc(var(--step) * 2);
+}
+
+.callout-sigil {
+  font-family: var(--font-mono);
+  letter-spacing: 0;
+  font-weight: 700;
+}
+
+.callout-sigil::before {
+  content: "[";
+}
+
+.callout-sigil::after {
+  content: "]";
+}
+
+.callout > :last-child {
+  margin-bottom: 0;
+}
+
+/* The tombstone is pulled up onto the last line of the statement it closes. */
+.callout-qed {
+  display: block;
+  margin-top: -1.5em;
+  text-align: right;
+  color: var(--ink-2);
+  line-height: 1;
+}

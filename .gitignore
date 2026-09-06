@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.astro/
+# Spike build output: bundles and rendered pages. The measurements taken from
+# them live in docs/, which is what we actually keep.
+spike/**/out/
+spike/**/out-*/
+.DS_Store

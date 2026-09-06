@@ -1,0 +1,67 @@
+---
+import "../styles/fonts.css";
+import "../styles/tokens.css";
+import "../styles/base.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} — Beyond Any Doubt</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={Astro.url.href} />
+    <link
+      rel="preload"
+      href="/fonts/stix-two-text-latin-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    {/*
+      Inline and synchronous on purpose. The theme has to be settled before the
+      first paint, or a reader who wants dark gets a full screen of white first.
+      That rules out a bundled module, which is deferred by definition.
+    */}
+    <script is:inline>
+      (() => {
+        try {
+          const stored = localStorage.getItem("theme");
+          const dark =
+            stored === null
+              ? matchMedia("(prefers-color-scheme: dark)").matches
+              : stored === "dark";
+          if (dark) document.documentElement.dataset.theme = "dark";
+        } catch {
+          /* Private mode can refuse localStorage; the light theme is a fine default. */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="shell">
+      <button class="theme-toggle" type="button" aria-pressed="false">
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2" />
+          <path d="M12 2.2v3M12 18.8v3M2.2 12h3M18.8 12h3M5 5l2.1 2.1M16.9 16.9 19 19M19 5l-2.1 2.1M7.1 16.9 5 19" />
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.2 8.2 0 1 0 10.2 10.2z" />
+        </svg>
+        <span class="theme-toggle-label">Dark theme</span>
+      </button>
+      <slot />
+    </div>
+    <script>
+      import "../scripts/theme.js";
+    </script>
+  </body>
+</html>

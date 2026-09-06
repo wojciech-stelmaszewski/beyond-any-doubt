@@ -1,0 +1,38 @@
+---
+const engine = import.meta.env.MATH_ENGINE ?? "katex";
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Math spike — {engine}</title>
+    <link rel="stylesheet" href="../katex/katex.min.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 20px 26px;
+        background: #faf8f4;
+        color: #16181d;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+      .badge {
+        font-family: ui-monospace, monospace;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        background: #2740b0;
+        color: #fff;
+        padding: 3px 9px;
+        border-radius: 4px;
+      }
+      h1 { font-size: 20px; margin: 10px 0 14px; }
+      p { margin: 0 0 10px; }
+      mjx-container[display], .katex-display { margin: 10px 0; }
+    </style>
+  </head>
+  <body>
+    <span class="badge">engine: {engine}</span>
+    <slot />
+  </body>
+</html>

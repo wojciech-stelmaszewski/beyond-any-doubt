@@ -143,6 +143,51 @@ touch lean/.lake/.metadata_never_index
 sudo tmutil addexclusion lean/.lake
 ```
 
+## Working offline
+
+Everything after the first successful build is local. This was tested rather
+than assumed, with outbound HTTP forced through a dead proxy: `lake build`,
+`lake build Tutorial`, `lake exe banach` and `scripts/verify.sh` all complete
+normally with no network, including a full re-elaboration after deleting the
+project's own build output. The editor and its infoview need nothing either.
+
+Three directories have to survive for that to hold:
+
+| Path | Size | What it is |
+| --- | --- | --- |
+| `~/.elan/toolchains/…` | 2.7 GB | the compiler, shared by every project on that version |
+| `lean/.lake` | 7.5 GB | Mathlib's sources and the `.olean` files built from them |
+| `~/.cache/mathlib` | 440 MB | the compressed `.ltar` archives the cache was unpacked from |
+
+The third is easy to overlook and is the one that makes offline work robust.
+`lean/.lake/build` can be reconstructed from it without a network, and it can be
+reconstructed from `lean/.lake/build` in turn — `lake exe cache pack` compresses
+in the direction opposite to unpacking. Either copy is enough to regenerate the
+other, so keep at least one.
+
+One sharp edge, found the hard way. `lake exe cache get` is **not** idempotent
+against files you deleted by hand: it notices a marker recording that all 8690
+files were already decompressed, reports "No files to download", and does
+nothing. If build output has gone missing, the command that actually restores it
+is
+
+```sh
+lake exe cache unpack!
+```
+
+which forces decompression of every linked file from the local archives. It took
+28 seconds here and needed no network at all.
+
+`scripts/verify.sh` calls `cache get` first but does not treat its failure as
+fatal, precisely so that an offline run proceeds to the build instead of
+stopping on a fetch that had nothing to fetch.
+
+What still requires a network: the initial install, changing `lean-toolchain` or
+the Mathlib `rev` (a different version means a different cache), `elan update`,
+and `lake update`. Among the tactics, `exact?`, `apply?` and `simp?` search the
+local library and work offline; `#leansearch` and its relatives query a web
+service and will not.
+
 ## When it goes wrong
 
 | Symptom | Cause | Fix |
@@ -151,12 +196,15 @@ sudo tmutil addexclusion lean/.lake
 | Editor cannot find `lake`, terminal can | GUI apps do not inherit shell `PATH` | launch via `cursor .`, or set `lean4.toolchainPath` |
 | Build compiles thousands of Mathlib files | cache missed | `lean-toolchain` and the `rev` in `lakefile.toml` must name the same version |
 | `lake exe cache get` fails midway | transient network | rerun it; it resumes, and is safe to repeat |
+| Build output vanished and `cache get` says "No files to download" | it skips when it believes the cache is already unpacked | `lake exe cache unpack!` |
 | `no such file or directory: lean-toolchain` | wrong directory | run from `lean/`, not the repository root |
 | `xcrun: error: invalid active developer path` | Command Line Tools missing | `xcode-select --install` |
 | `elan self update` refuses | Homebrew build has self-update disabled | `brew upgrade elan-init` |
 
 When a build looks stale rather than broken — output not matching the source —
-delete `.lake` and rerun `lake exe cache get`. Nothing in it is precious.
+delete `.lake/build` and rerun `lake exe cache unpack!`. Nothing in `.lake` is
+precious, but deleting the whole of it also discards the Mathlib checkout, which
+cannot be recovered without a network.
 
 ## Uninstalling
 
@@ -164,6 +212,7 @@ delete `.lake` and rerun `lake exe cache get`. Nothing in it is precious.
 elan self uninstall        # or: brew uninstall elan-init
 rm -rf ~/.elan             # toolchains, if anything is left behind
 rm -rf lean/.lake          # Mathlib and build output
+rm -rf ~/.cache/mathlib    # the compressed cache; 440 MB, and easy to forget
 ```
 
 Lean writes nothing outside those directories and the one line it added to your

@@ -16,8 +16,13 @@ cd "$(dirname "$0")/.."
 log=$(mktemp)
 trap 'rm -f "$log"' EXIT
 
+# Not fatal on failure: with a warm cache this step has nothing to do, so an
+# offline run should proceed to the build rather than stop here. If the cache is
+# genuinely cold the build below will say so, at length.
 echo "==> Fetching prebuilt Mathlib (no-op once the cache is warm)"
-lake exe cache get
+if ! lake exe cache get; then
+  echo "    cache fetch failed — offline? proceeding with what is already built" >&2
+fi
 
 echo "==> Building: every theorem is rechecked from its axioms"
 lake build 2>&1 | tee "$log"

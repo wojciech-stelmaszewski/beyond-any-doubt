@@ -106,6 +106,31 @@ from the Dock may fail to find `lake` when the terminal finds it fine.
 Visual Studio proper is not part of this: no MSBuild, no solution file. Lake is
 the build tool, and `lean/` is independent of the Astro site around it.
 
+## A scratchpad instead of a REPL
+
+Lean 4 ships no interactive prompt, and the reason is that the editor already is
+one: an open file is re-elaborated as you type, and the infoview reports the
+result at the cursor. A prompt would be a worse version of that, because it could
+not show you a proof state in the middle of a tactic block.
+
+`Scratch.lean` exists for that. It belongs to no build target, so `lake build`
+and `scripts/verify.sh` ignore it and it can be left broken, half-finished, or
+full of `sorry` without consequence. Three commands stand in for a prompt:
+`#eval` runs an expression, `#check` prints its type without running it, and
+`#print axioms` shows what a proof rests on.
+
+For the terminal, `lake env lean --stdin` elaborates whatever it is given:
+
+```sh
+printf 'import Mathlib.Tactic\n#eval 2 + 2\n' | lake env lean --stdin
+```
+
+Each invocation is a fresh process, so nothing carries over between them — it is
+a batch checker being used as a prompt, not a session. The import is what costs:
+about two and a half seconds for `Mathlib.Tactic`, about twenty for all of
+`Mathlib`. In the editor that price is paid once per file rather than per line,
+which is the other reason the scratchpad is the better tool.
+
 ## The proof
 
 `Banach/FixedPoint.lean`, four declarations.
@@ -158,6 +183,7 @@ lean/
     Examples.lean       instances, degenerate cases, #print axioms
   Tutorial/             eight lessons from zero to reading the above
     Solutions/          one per lesson, and the proof they are solvable
+  Scratch.lean          a playground, in no build target; break it freely
   Main.lean             `lake exe banach`; illustration, imports nothing
   scripts/verify.sh     build, then check for admitted goals
 ```

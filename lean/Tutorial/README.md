@@ -32,6 +32,11 @@ lake build Tutorial
 Every remaining `sorry` shows up as one warning, so the warning count is your
 progress bar. It starts at 32.
 
+To try something out that belongs to no lesson, use [`../Scratch.lean`](../Scratch.lean).
+It is in no build target, so it can be left in any state, and `#eval`, `#check`
+and `example ... := by sorry` there do the job a REPL would do in another
+language.
+
 ## Why this directory is not part of the build
 
 `lake build` and `scripts/verify.sh` deliberately ignore it. Unfinished exercises

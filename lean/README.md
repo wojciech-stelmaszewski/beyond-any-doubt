@@ -32,6 +32,15 @@ name the same version — Lean `v4.33.1` and the Mathlib tag built against it. B
 one and you must bump the other, or the cache silently misses and the build falls
 back to compiling everything from source: an hour rather than two minutes.
 
+## If none of this reads as mathematics yet
+
+Start with [`Tutorial/`](Tutorial/README.md): eight lessons and 32 exercises that
+build up exactly the constructions this proof uses and nothing else, ending with
+the two exercises that reconstruct its central steps. It assumes no Lean at all.
+
+It is a separate library, outside `defaultTargets`, because its exercises are
+full of `sorry` by design — build it with `lake build Tutorial`.
+
 ## Checking the proofs
 
 `lake build` *is* the test run. Lean type-checks every proof term it compiles, and
@@ -147,6 +156,8 @@ lean/
   Banach/
     FixedPoint.lean     the theorem and its proof
     Examples.lean       instances, degenerate cases, #print axioms
+  Tutorial/             eight lessons from zero to reading the above
+    Solutions/          one per lesson, and the proof they are solvable
   Main.lean             `lake exe banach`; illustration, imports nothing
   scripts/verify.sh     build, then check for admitted goals
 ```

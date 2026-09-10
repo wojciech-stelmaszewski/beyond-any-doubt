@@ -12,6 +12,14 @@ rev = "v4.33.1"
 [[lean_lib]]
 name = "Banach"
 
+# Kept out of `defaultTargets` because the lessons are full of `sorry` by design:
+# unfinished exercises are the normal state of a tutorial, and they must not make
+# `lake build` or `scripts/verify.sh` go red. Build it explicitly with
+# `lake build Tutorial`.
+[[lean_lib]]
+name = "Tutorial"
+globs = ["Tutorial", "Tutorial.+"]
+
 # Illustration only, and kept out of `defaultTargets` on purpose: linking an
 # executable against Mathlib is slow, so `Main.lean` imports none of it.
 [[lean_exe]]

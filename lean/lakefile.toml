@@ -1,0 +1,19 @@
+name = "banach"
+defaultTargets = ["Banach"]
+
+# Pinned to the Mathlib tag that is built against exactly the toolchain named in
+# `lean-toolchain`. A mismatch does not fail loudly: it silently misses the
+# prebuilt cache and turns a two-minute setup into an hour of compiling Mathlib.
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+rev = "v4.33.1"
+
+[[lean_lib]]
+name = "Banach"
+
+# Illustration only, and kept out of `defaultTargets` on purpose: linking an
+# executable against Mathlib is slow, so `Main.lean` imports none of it.
+[[lean_exe]]
+name = "banach"
+root = "Main"

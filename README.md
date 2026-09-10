@@ -181,3 +181,7 @@ that file.
 [MathJax against KaTeX comparison](docs/spike-math-2026-09-05.md), and the
 [3D plotting library benchmarks](docs/spike-plot-3d-2026-09-05.md) that settled
 on three.js.
+
+`lean/` is separate from the site and does not ship with it: a machine-checked
+proof of [Banach's fixed point theorem](lean/README.md), taking the title of this
+place a little more literally than the posts do.

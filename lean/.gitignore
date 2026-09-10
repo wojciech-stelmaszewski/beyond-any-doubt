@@ -1,0 +1,3 @@
+# Lake's build directory: compiled olean files and the fetched Mathlib checkout.
+# Several gigabytes, all of it reproducible from `lake exe cache get`.
+.lake/

@@ -1,5 +1,5 @@
 name = "banach"
-defaultTargets = ["Banach"]
+defaultTargets = ["Banach", "Talemi"]
 
 # Pinned to the Mathlib tag that is built against exactly the toolchain named in
 # `lean-toolchain`. A mismatch does not fail loudly: it silently misses the
@@ -11,6 +11,12 @@ rev = "v4.33.1"
 
 [[lean_lib]]
 name = "Banach"
+
+# The numeral system from the Talemi post. In `defaultTargets` because it is
+# finished work rather than exercises, and it imports no Mathlib at all, so it
+# costs the build about a second.
+[[lean_lib]]
+name = "Talemi"
 
 # Kept out of `defaultTargets` because the lessons are full of `sorry` by design:
 # unfinished exercises are the normal state of a tutorial, and they must not make

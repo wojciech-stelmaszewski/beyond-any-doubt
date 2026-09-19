@@ -1,7 +1,10 @@
-# Banach's fixed point theorem, in Lean
+# The machine-checked part of the site
 
-A machine-checked proof of the contraction mapping theorem, written out from the
-definition of a contraction rather than assembled from library lemmas.
+Two libraries. `Banach` is a proof of the contraction mapping theorem, written
+out from the definition of a contraction rather than assembled from library
+lemmas, and it is what the rest of this file is about. `Talemi` is the numeral
+system from [the post of that name](../src/content/posts/talemi-numerals.md),
+and has [a section of its own](#the-talemi-numerals) at the end.
 
 The site's prose proofs are checked by whoever reads them. This directory checks
 one of them the other way: Lean refuses to compile a proof with a gap, so a green
@@ -169,6 +172,37 @@ makes a sequence Cauchy), `cauchySeq_tendsto_of_complete`, and
 `dist_le_of_le_geometric_of_tendsto` for summing the tail. Reproving those would
 mean reproving the geometric series, which is a different lecture.
 
+## The Talemi numerals
+
+`Talemi/`, two files, and a different kind of formalisation: not a theorem from
+a textbook but a reconstruction from evidence, where the risk is not that a step
+fails to follow but that the informal account quietly says more than the data
+supports.
+
+`Numerals.lean` keeps three things apart that the prose solution runs together
+— the syntax tree, its value, and the syllables that surface — and then proves
+the claim that is easiest to get wrong. The digit 4 and the additive linker are
+the same syllable, `na`, which looks like an ambiguity and is not one:
+
+```
+theorem parse_toks (t : TNum) : parse (toks t) = some t
+```
+
+`parse` is written independently of `toks`, so this says the reader recovers
+what the writer meant, every time. Injectivity of the spelling follows in two
+lines.
+
+`Examples.lean` is the corpus as a test suite — every attested word spelled and
+valued — followed by the four things the corpus does *not* settle: that a number
+has several spellings, that `kasao` denotes −1, that depth is unbounded, and that
+zero-padding gives every number infinitely many forms, which is why counting them
+is the wrong question.
+
+It imports no Mathlib. `Int`, induction and `rfl` are the whole toolkit, so the
+library elaborates in about a second — and `native_decide`, which would be the
+tempting tactic on goals that are pure computation, is deliberately absent:
+`verify.sh` fails on the `Lean.ofReduceBool` it leaves behind.
+
 ## Layout
 
 ```
@@ -181,6 +215,10 @@ lean/
   Banach/
     FixedPoint.lean     the theorem and its proof
     Examples.lean       instances, degenerate cases, #print axioms
+  Talemi.lean           the other library root
+  Talemi/
+    Numerals.lean       syntax, semantics, and the unambiguity proof
+    Examples.lean       the attested corpus, and what it leaves open
   Tutorial/             eight lessons from zero to reading the above
     Solutions/          one per lesson, and the proof they are solvable
   Scratch.lean          a playground, in no build target; break it freely

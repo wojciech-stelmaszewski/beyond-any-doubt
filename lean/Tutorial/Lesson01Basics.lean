@@ -109,12 +109,12 @@ not the difficulty.
 -/
 
 -- Numbers Lean can simply compute.
-example : 7 * 6 = 42 := by sorry
+example : 7 * 6 = 42 := by norm_num
 
 -- A lambda applied to an argument computes, so `rfl` reaches this one.
-example : (fun n : Nat => n + 1) 3 = 4 := by sorry
+example : (fun n : Nat => n + 1) 3 = 4 := by norm_num
 
 -- Bigger numbers. `rfl` still works, but `norm_num` is the tool built for it.
-example : 2 ^ 10 = 1024 := by sorry
+example : 2 ^ 10 = 1024 := by norm_num
 
 end Tutorial.Lesson01

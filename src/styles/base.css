@@ -75,6 +75,65 @@ hr {
   margin: calc(var(--step) * 10) 0;
 }
 
+/*
+ * Tables are ruled the way a book rules them — above the head, below it, and
+ * under the last row — rather than boxed. Vertical lines and row stripes would
+ * both add ink that the alignment already provides.
+ *
+ * `display: block` is what lets a table too wide for the measure scroll inside
+ * the column instead of widening the page. It costs the table its automatic
+ * full-bleed width, which is why `min-width` puts that back.
+ */
+table {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: calc(var(--step) * 7) 0;
+  font-variant-numeric: tabular-nums;
+}
+
+thead {
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+tbody {
+  border-bottom: 1px solid var(--rule);
+}
+
+th,
+td {
+  padding: calc(var(--step) * 2) calc(var(--step) * 5);
+  text-align: left;
+  vertical-align: baseline;
+}
+
+/*
+ * The first and last columns sit flush with the text column, so a table reads
+ * as part of the prose rather than as an inset panel.
+ */
+th:first-child,
+td:first-child {
+  padding-left: 0;
+}
+
+th:last-child,
+td:last-child {
+  padding-right: 0;
+}
+
+th {
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
 .meta {
   font-family: var(--font-ui);
   font-size: 0.875rem;

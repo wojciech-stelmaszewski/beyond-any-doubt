@@ -175,6 +175,11 @@ Pushing to `main` builds the site and publishes it to GitHub Pages via
 settings, not in a `CNAME` file — when publishing from a workflow, GitHub ignores
 that file.
 
+Google Analytics 4 is included in the production build when the repository
+variable `PUBLIC_GA_MEASUREMENT_ID` is set (Settings → Secrets and variables →
+Actions → Variables). The tag is held until a reader allows it; the choice is
+stored in `localStorage`. `astro dev` never loads the tag.
+
 ## Notes
 
 `docs/` holds the reasoning behind the larger choices: the palette, the

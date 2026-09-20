@@ -39,6 +39,8 @@ jobs:
       - run: node scripts/check-automaton.mjs
 
       - run: npm run build
+        env:
+          PUBLIC_GA_MEASUREMENT_ID: ${{ vars.PUBLIC_GA_MEASUREMENT_ID }}
 
       # The custom domain lives in the repository's Pages settings, not in a
       # CNAME file: when publishing from a workflow, GitHub ignores that file.

@@ -18,6 +18,16 @@ const { title, description, card = "/og/site.png", article } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url);
 const cardUrl = new URL(card, site.url);
 
+/*
+ * The measurement ID is baked in at build time. Local `astro dev` never
+ * sees it, so turning the pages does not become a session; a build without
+ * the variable emits no tag at all.
+ */
+const gaCandidate = import.meta.env.PROD
+  ? String(import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? "").trim()
+  : "";
+const gaId = /^G-[A-Z0-9]+$/.test(gaCandidate) ? gaCandidate : "";
+
 /* The home page is already called this; saying it twice reads as a stutter. */
 const pageTitle = title === site.name ? site.name : `${title} — ${site.name}`;
 
@@ -146,9 +156,35 @@ const schema = article
         <span class="theme-toggle-label">Dark theme</span>
       </button>
       <slot />
+      {
+        gaId && (
+          <p class="consent-foot" hidden>
+            <button type="button" class="consent-reopen">Cookie choice</button>
+          </p>
+        )
+      }
     </div>
+    {
+      gaId && (
+        <aside class="consent" hidden data-ga-id={gaId} aria-label="Analytics cookies">
+          <div class="consent-inner">
+            <p>
+              Google Analytics can record that this page was read. Nothing is sold, and
+              nothing follows you elsewhere.
+            </p>
+            <div class="consent-actions">
+              <button type="button" class="consent-allow">Allow</button>
+              <button type="button" class="consent-decline">No</button>
+            </div>
+          </div>
+        </aside>
+      )
+    }
     <script>
       import "../scripts/theme.js";
+    </script>
+    <script>
+      import "../scripts/consent.js";
     </script>
   </body>
 </html>

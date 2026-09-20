@@ -489,7 +489,8 @@ chosen to fit the shape of the others and meaning nothing more than "the ninth
 root, whatever it was". Every claim below that mentions `ze` is a claim about
 the slot, not about the syllable.
 
-**A zero.** This one is forced, and the argument is short. An exact multiple of
+**A zero.** A zero *remainder* is forced under this grammar, and the argument
+is short. An exact multiple of
 twelve needs a zero in the units place: twenty-four is $0 + 12 \cdot 2$, and no
 other digit will do, because $\eqref{eq:add}$ with $d \ge 1$ gives at least
 $1 + 12k$ and $\eqref{eq:sub}$ would need a digit of twelve. Without a zero
@@ -499,8 +500,16 @@ multiples of twelve go `onate` $= 72$, `onari` $= 84$, `onaze` $= 108$.
 > [!remark] How much of a zero?
 > Saying that the arithmetic needs a zero remainder is not the same as saying
 > the language had a word for nothing. A speaker might well have a syllable
-> that appears only inside compounds and never as an answer to "how many?".
-> The reconstruction needs the first and says nothing about the second.
+> that appears only inside compounds and never as an answer to "how many?", or
+> a zero morpheme, or some separate construction for exact multiples of twelve
+> that puts no root in that slot at all. The reconstruction needs the
+> remainder and establishes nothing whatever about the word.
+>
+> The formalisation is then more generous than the argument that motivates it,
+> and the gap is worth naming rather than hiding. `o` is an ordinary digit in
+> the type, so the bare word `o` is well-formed and denotes zero on its own —
+> which is precisely the thing the paragraph above declines to claim. Nothing
+> below depends on it, but it is assumed rather than deduced.
 
 **Both linkers live.** The corpus uses `na` and `sa` both, and gives no sign
 that either is preferred where the two would fit. I assume they are simply
@@ -710,11 +719,14 @@ theorem.
 > Every proof here closes by reflexivity or by induction. On goals that are
 > pure computation it is tempting to reach for `native_decide`, which hands the
 > step to the compiler rather than to the kernel, and it is deliberately absent
-> throughout: it leaves an extra axiom, `Lean.ofReduceBool`, in the theorem's
-> list, and a theorem resting on that is a theorem about a compiled binary.
-> Every result quoted here stands on the three axioms Lean's own logic uses and
-> nothing further, and the build fails if that stops being true. The honest
-> tactic is also, here, fast enough.
+> throughout: it leaves an extra axiom in the theorem's list, and a theorem
+> resting on that is a theorem about a compiled binary. Exactly which axiom
+> depends on the toolchain — Lean once recorded a single `Lean.ofReduceBool`
+> for every such step and now mints a fresh one per call site — which is why
+> the check the build actually runs is an allowlist rather than a blocklist:
+> every result quoted here stands on the three axioms Lean's own logic uses
+> and nothing further, whatever a delegated step would have been called. The
+> honest tactic is also, here, fast enough.
 
 ## What formalising it exposes
 
@@ -759,9 +771,16 @@ anything.
 >
 > For an arbitrary value the same move works one level down. In any numeral,
 > replace the innermost root $d$ by $d\text{-na-}\mathrm{o}$; since
-> $d = d + 12 \cdot 0$ the value is untouched, and the word is two syllables
-> longer, so repeating it produces numerals of strictly increasing length and
-> therefore never repeats.
+> $d = d + 12 \cdot 0$ the value is untouched, while the tree gains a rung. So
+> iterating gives trees of strictly increasing size, which are pairwise
+> distinct, and distinct trees are distinct words by the injectivity of
+> $\operatorname{say}$ above.
+>
+> It is tempting to count syllables instead and say the word grows by two each
+> time, and that is false: padding underneath a fused rung destroys the fusion.
+> `katu` is two syllables, and padding its lower `ka` yields `kanakanao` at
+> five. The growth is strict but not constant, which is exactly why the
+> argument is better made on trees.
 
 The question worth asking is about forms without padding, or about a canonical
 shortest spelling. Which turns out to be the thread that unravels the rest of
@@ -877,8 +896,8 @@ job only `sa` can do is a job the monk never asks it to do.
 ## Nor does it save breath
 
 The remaining defence of the subtractive linker is economy. Roman numerals
-subtract for exactly that reason: `IX` is four characters shorter than
-`VIIII`, and that is the whole of its justification. `kasasu` reads as "one
+subtract for exactly that reason: `IX` spends two characters where `VIIII`
+spends five, and that is the whole of its justification. `kasasu` reads as "one
 short of three twelves", and if that were a syllable cheaper than "eleven and
 two twelves" then `sa` would have earned its place after all.
 
@@ -1044,11 +1063,12 @@ say.
 The reason is one line of the ceiling argument, read the other way round.
 
 > [!theorem] No subtractive word comes within eleven of the ceiling
-> If the outermost linker of a numeral $N$ is `sa`, and $N$ is $k$ syllables
-> long, then $\operatorname{val}(N) \le \operatorname{cap}(k) - 11$.
+> If a numeral $N$ of $k$ syllables uses `sa` anywhere at all, then
+> $\operatorname{val}(N) \le \operatorname{cap}(k) - 11$.
 
 > [!proof]
-> Let $N = d\text{-sa-}M$. As before $k = 2 + \operatorname{len} M$, so with
+> Take first the case where the subtraction is outermost, $N = d\text{-sa-}M$.
+> As before $k = 2 + \operatorname{len} M$, so with
 > $\operatorname{len} M = m+1$ we have $k = m+3$. Then
 > $$
 > \operatorname{val}(N) = 12\operatorname{val}(M) - d
@@ -1061,12 +1081,29 @@ The reason is one line of the ceiling argument, read the other way round.
 >
 > The eleven is exactly the digit the additive rung gets to add and the
 > subtractive rung has to give back.
+>
+> That much only rules out words that subtract *last*, which would leave room
+> for a rival hiding its `sa` under an additive rung. It cannot hide there.
+> Suppose $N = d\text{-na-}M$ where $M$ uses `sa` somewhere, and let $M$ be
+> $m+1$ syllables, so $N$ is $m+3$. The inductive hypothesis gives
+> $\operatorname{val}(M) \le \operatorname{cap}(m+1) - 11$, and therefore
+> $$
+> \operatorname{val}(N) = d + 12\operatorname{val}(M)
+>   \le 11 + 12\bigl(\operatorname{cap}(m+1) - 11\bigr)
+>    = \operatorname{cap}(m+3) - 132.
+> $$
+> Burying the subtraction costs more than leaving it on top: the rung above
+> multiplies the shortfall by twelve while handing back at most eleven. So the
+> bound holds at every depth, with room to spare below the top one.
 
-Eleven short, every time — so the eleven values immediately below each ceiling
-have no subtractive rival at all, and the additive spelling of each is left
-alone. Everywhere else there is slack, the two constructions come out level,
-and the tie stands. Uniqueness in Talemi is not a property of a number so much
-as of how tightly it is wedged under a ceiling.
+Eleven short, every time — and for every word that subtracts anywhere, not
+merely for those that subtract last. That is what makes the conclusion go
+through: in the eleven values immediately under each ceiling there is no
+subtractive rival to be had at any depth, so only purely additive words are
+left in contention, and among those the value fixes every digit. One of them
+is shortest, and it is alone. Everywhere else there is slack, the two
+constructions come out level, and the tie stands. Uniqueness in Talemi is not
+a property of a number so much as of how tightly it is wedged under a ceiling.
 
 It keeps going, too, and counting rather than merely asking yes or no makes the
 shape clearer. Below three hundred the number of shortest spellings is not
@@ -1167,7 +1204,8 @@ zero is `multiple_needs_zero_head`; the reach of the system is `eval_encode`
 for the naturals,
 `eval_encodeInt` for the integers, and `additive_range` for the fragment
 without `sa`; the ceiling argument is `encode_shortest` and
-`sub_le_cap_sub_eleven`; the tie at thirty-five is `both_shortest_35`; the
+`sub_le_cap_sub_eleven`, with the extension to a buried `sa` in
+`usesSub_le_cap_sub_eleven`; the tie at thirty-five is `both_shortest_35`; the
 count below four hundred is `unique_shortest_below_400`, sharpened from a
 yes-or-no answer to the counts themselves by `tie_counts_below_300`.
 

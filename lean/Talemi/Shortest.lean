@@ -145,6 +145,39 @@ theorem sub_le_cap_sub_eleven (d : Digit) (rest : TNum) :
   rw [hk]
   simp only [cap]; omega
 
+/-- Whether `sa` appears anywhere in a word, at any depth. -/
+def usesSub : TNum → Bool
+  | .atom _       => false
+  | .add12 _ rest => usesSub rest
+  | .sub12 _ _    => true
+
+/-- **No word using `sa` at all comes within eleven of the ceiling.** The
+theorem above bounds the case where the subtraction is outermost, which on its
+own leaves room for a rival hiding its `sa` under an additive rung. It cannot
+hide there: an additive rung on top adds at most eleven and multiplies the
+shortfall by twelve, so burying the `sa` puts the word further under the
+ceiling rather than nearer it. The eleven values below each ceiling are
+therefore out of reach of every subtractive word, not merely of the ones that
+subtract last — which is what the blocks in `Enumeration.lean` need. -/
+theorem usesSub_le_cap_sub_eleven (t : TNum) :
+    usesSub t = true → eval t ≤ cap (len t) - 11 := by
+  induction t with
+  | atom d => intro h; simp [usesSub] at h
+  | add12 d rest ih =>
+    intro h
+    simp only [usesSub] at h
+    have hne : rest ≠ .atom .ka := by rintro rfl; simp [usesSub] at h
+    obtain ⟨m, hm⟩ : ∃ m, len rest = m + 1 :=
+      ⟨len rest - 1, by have := len_pos rest; omega⟩
+    have hb := ih h
+    rw [hm] at hb
+    have := Digit.value_lt_twelve d
+    have hk : 2 + len rest = m + 3 := by omega
+    rw [len_add12 hne, hk]
+    show d.value + 12 * eval rest ≤ cap (m + 3) - 11
+    simp only [cap]; omega
+  | sub12 d rest _ => intro _; exact sub_le_cap_sub_eleven d rest
+
 /-! ## The additive spelling reaches the ceiling
 
 The converse: if a number fits under `cap k`, then `encode` spells it in at

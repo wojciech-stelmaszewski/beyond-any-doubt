@@ -341,10 +341,13 @@ theorem kanaka_unsayable :
 Lean lists the axioms each theorem rests on. Expect `propext` where `simp` was
 used, and `Quot.sound` with `Classical.choice` wherever `encode` is involved,
 since it recurses on a shrinking quotient rather than on a constructor. What
-must *not* appear is `Lean.ofReduceBool`: that is what `native_decide` leaves
-behind, and it means a step was handed to the compiler instead of being checked
-by the kernel. This repository's verification step fails the build on it, which
-is why the count of ties is a `decide` — slow, and checked. -/
+must *not* appear is anything else at all. In particular `native_decide` leaves
+an axiom behind, meaning a step was handed to the compiler instead of being
+checked by the kernel; older toolchains record that as `Lean.ofReduceBool` and
+current ones mint one per call site, so the verification step works from an
+allowlist of the three classical axioms and rejects every other name whatever
+it turns out to be. Which is why the count of ties is a `decide` — slow, and
+checked. -/
 
 #print axioms TNum.parse_toks
 #print axioms TNum.toks_injective
@@ -360,6 +363,7 @@ is why the count of ties is a `decide` — slow, and checked. -/
 #print axioms TNum.eval_encodeInt
 #print axioms TNum.additive_range
 #print axioms TNum.encode_shortest
+#print axioms TNum.usesSub_le_cap_sub_eleven
 #print axioms TNum.unique_shortest_below_400
 #print axioms TNum.tie_counts_below_300
 

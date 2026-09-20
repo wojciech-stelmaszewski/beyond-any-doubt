@@ -40,8 +40,12 @@ fi
 
 # The `#print axioms` lines in Banach/Examples.lean list everything each theorem
 # rests on. Anything outside Mathlib's three classical axioms is a finding:
-# `sorryAx` means an admitted goal somewhere below, and `Lean.ofReduceBool` means
-# a step was delegated to compiled code instead of being checked by the kernel.
+# `sorryAx` means an admitted goal somewhere below, and an axiom left by
+# `native_decide` means a step was delegated to compiled code instead of being
+# checked by the kernel. The test below is an allowlist rather than a list of
+# names to reject, which is what keeps it working across toolchains: Lean used
+# to record a single `Lean.ofReduceBool` for the latter case and now mints one
+# axiom per call site, and either way the name is simply not on the list.
 echo "==> Checking which axioms the proofs rest on"
 listings=$(grep -c 'depends on axioms' "$log" || true)
 if [ "$listings" -eq 0 ]; then

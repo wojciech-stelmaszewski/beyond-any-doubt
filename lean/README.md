@@ -69,9 +69,13 @@ second reads the `#print axioms` lines that `Banach/Examples.lean` emits:
 
 Those three are Mathlib's classical foundation, and the script fails on anything
 else in that list. `sorryAx` would appear there if any part of the proof, however
-deep, were admitted; `Lean.ofReduceBool` would appear if a step had been delegated
-to compiled code instead of checked by the kernel. It is the closest thing to a
-certificate that Lean offers.
+deep, were admitted, and an extra axiom would appear if a step had been delegated
+to compiled code instead of checked by the kernel. The script tests against an
+allowlist rather than a list of names to reject, which is what keeps it honest
+across toolchains: delegated steps used to be recorded as a single
+`Lean.ofReduceBool` and are now given one axiom per call site, and either way the
+name is not on the list. It is the closest thing to a certificate that Lean
+offers.
 
 Both checks were tested the only way a check can be: by planting a `sorry` and
 confirming the script goes red, then removing it and confirming it goes green.
@@ -225,7 +229,10 @@ Of the first four hundred numbers, forty-six have a single shortest spelling,
 and they fall in three runs ending at `cap 2`, `cap 3` and `cap 4`. That is
 `sub_le_cap_sub_eleven` showing through: a subtractive word lands eleven short
 of the ceiling for its length, so the eleven values just beneath each ceiling
-have no rival to tie with.
+have no rival to tie with. That theorem covers the case where the subtraction
+is outermost; `usesSub_le_cap_sub_eleven` carries the bound to a `sa` at any
+depth, which is what the argument actually needs, since a rival could otherwise
+have hidden one under an additive rung.
 
 `tie_counts_below_300` sharpens that from "unique or not" to the count itself,
 which turns out to be constant between ceilings and to drop to 1 over the
@@ -245,7 +252,7 @@ It imports no Mathlib. `Int`, induction and `rfl` are the whole toolkit, so most
 of the library elaborates in about a second. The dozen seconds it actually
 costs are the two counts of ties, both `decide`: `native_decide` would be faster
 on a goal that is pure computation and is deliberately absent, because
-`verify.sh` fails on the `Lean.ofReduceBool` it leaves behind.
+`verify.sh` fails on the extra axiom it leaves behind.
 
 ## Layout
 

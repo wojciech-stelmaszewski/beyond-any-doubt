@@ -1216,6 +1216,28 @@ system they belong to is here — complete, with its ninth root borrowed and its
 zero argued for. The arithmetic checks out, and this time that is not a figure
 of speech.
 
+One line in those leaves was addressed to me, and I was slow to notice it. The
+scribe gave a place, a year, two men to date himself by and an order, and no
+name; then he closed with the only request the document makes of anyone. *Qui
+legis, ora pro scriptore.* You who read, pray for the writer. It is the single
+sentence in the whole manuscript I did not have to reconstruct, hedge, or
+supply a missing root for. It arrived whole, it was meant for whoever got this
+far, and it asks for the one thing I was in a position to give. Having spent
+months taking from him, I gave it. There is nothing else to give a man who took
+such care to leave nothing to thank.
+
+Behind him stands the holy man at Mokissos, on whom the sources are silent, and
+who is only *said* to have set the question at all. If he did, he set it to his
+disciples — which is to say he set it as an exercise, and it is a strange one
+only until it gives way. After that it is very simple indeed: count in twelves,
+and let a digit be owed as readily as held. Would he be proud that I solved it?
+I find I cannot say. He asked it of novices in Cappadocia, and it has come back
+to him by way of Padua, a shelf in Venice and a proof assistant, answered by
+someone who needed twelve hundred lines to be sure of an arithmetic those
+novices were presumably expected to see before supper. Perhaps that counts as
+solving it. Perhaps it is only the long way round to where he was already
+standing when he asked.
+
 ## The Lean sources
 
 Every proof written out above is also a proof in a small Lean library, checked

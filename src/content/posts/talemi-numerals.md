@@ -587,8 +587,8 @@ One subtlety deserves to be stated before the grammar rather than after it.
 Thirteen is `katu`, never `kanaka`. By $\eqref{eq:add}$ those would be the same
 number, $1 + 12 \cdot 1$, and only one of them is Talemi. So `tu` is not a
 construction of its own: it is the fused realisation of the linker `na`
-followed by the root `ka`. Writing $D\text{tu}$ as a separate production would
-generate both forms and get the language wrong.
+followed by a `ka` that ends the word. Writing $D\text{tu}$ as a separate
+production would generate both forms and get the language wrong.
 
 That leaves two productions:
 
@@ -598,8 +598,35 @@ Numeral ::= Digit
           | Digit sa Numeral      -- 12·N - d
 ```
 
-with $\eqref{eq:add}$ and $\eqref{eq:sub}$ as the semantics, `na ka` surfacing
-as `tu`.
+with $\eqref{eq:add}$ and $\eqref{eq:sub}$ as the semantics, and the fusion
+applied to the finished word.
+
+That fusion is narrower than "`na ka` surfaces as `tu`" makes it sound, in two
+ways worth pinning down. It reaches the bottom rung only, where `ka` is the
+whole remainder rather than a digit with more word behind it: thirteen padded
+out to `kanakanao` keeps its internal `na ka` intact and does not collapse to
+`katunao`. And where the digit on that bottom rung is `o`, the `o` goes unsaid
+as well, so twelve is `tu` and not `otu`, and $145$ is `kanatu` and not
+`kanaotu`. Stated on the syllable string, the two rules are: word-final
+`na ka` becomes `tu`, and then word-final `o tu` becomes `tu`.
+
+> [!remark] Where this sits in the Chomsky hierarchy
+> Lower than the recursion makes it look. `Digit` expands to one of twelve
+> roots and to nothing else, so substituting it out leaves every production in
+> the form `Numeral → w` or `Numeral → w Numeral`. That is a right-linear
+> grammar, and the language is therefore regular rather than merely
+> context-free: it is
+> $\text{Digit}\,\bigl((\mathrm{na} \mid \mathrm{sa})\ \text{Digit}\bigr)^{*}$,
+> and two states recognise it — one expecting a root, one expecting a linker
+> or the end of the word.
+>
+> The fusion is the part that looks as though it might push the system higher,
+> a rule conditioned by its environment being the shape of a context-sensitive
+> production. It does not. It is a realisation rule applied to the output
+> rather than a production of the grammar, and it is itself finite-state, so
+> the surface forms are a rational image of a regular language and regular in
+> turn. Which is why the reader below can be a single left-to-right pass with
+> nothing to backtrack over.
 
 ## Writing it down so a machine can check it
 

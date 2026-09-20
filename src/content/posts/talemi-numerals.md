@@ -622,20 +622,54 @@ as well, so twelve is `tu` and not `otu`, and $145$ is `kanatu` and not
 > context-free: it is
 > $\text{Digit}\,\bigl((\mathrm{na} \mid \mathrm{sa})\ \text{Digit}\bigr)^{*}$,
 > and two states recognise it — one expecting a root, one expecting a linker
-> or the end of the word.
+> or the end of the word.[^rightlinear]
 >
 > The fusion is the part that looks as though it might push the system higher,
 > a rule conditioned by its environment being the shape of a context-sensitive
 > production. It does not. It is a realisation rule applied to the output
 > rather than a production of the grammar, and it is itself finite-state, so
 > the surface forms are a rational image of a regular language and regular in
-> turn. Which is why the reader below can be a single left-to-right pass with
-> nothing to backtrack over — three states rather than two, once the fused
-> `tu` is given one of its own.
+> turn.[^rational] Which is why the reader below can be a single left-to-right
+> pass with nothing to backtrack over — three states rather than two, once the
+> fused `tu` is given one of its own.
 
 ```figure
 { "diagram": "talemi-reader", "caption": "The reader as a finite automaton. Two states carry the grammar proper — one wanting a root, one wanting a linker — and the third is what the fusion costs, since <code>tu</code> closes a word and nothing may follow it. A double ring marks a state a word may end in, which is why <code>kana</code> is refused: it stops having promised the linker something to link. Pick a word to walk it through, or click a syllable to stop there." }
 ```
+
+[^rightlinear]: The equivalence is the standard one between right-linear
+    grammars and finite automata: read a production $N \to w\,N'$ as "emit $w$
+    and go to the state for $N'$", and $N \to w$ as "emit $w$ and stop". What
+    makes it available here is that `Digit` is a nonterminal with only
+    terminal right-hand sides, so substituting it out leaves no recursion
+    except at the right end — and recursion at the right end is iteration,
+    which is exactly what a loop in an automaton is. The class is fixed by the
+    *shape* of the productions rather than by how recursive the definition
+    looks: a grammar with the nonterminal in the middle, `Numeral → a Numeral
+    b`, is not right-linear, and grammars of that shape can generate languages
+    no automaton recognises. The classification is Chomsky's: N. Chomsky, "On
+    certain formal properties of grammars", *Information and Control* 2/2
+    (1959), 137–167,
+    [doi:10.1016/S0019-9958(59)90362-6](https://doi.org/10.1016/S0019-9958(59)90362-6);
+    the finite-state case had been worked out the year before in N. Chomsky
+    and G. A. Miller, "Finite state languages", *Information and Control* 1/2
+    (1958), 91–112,
+    [doi:10.1016/S0019-9958(58)90082-2](https://doi.org/10.1016/S0019-9958(58)90082-2).
+    Both are open archive at Elsevier.
+
+[^rational]: A transduction a finite-state transducer can perform is called
+    rational, and rational transductions carry regular languages to regular
+    languages — so a fusion applied to the output of a regular grammar cannot
+    push the result out of the class, however context-sensitive the rule reads
+    on the page. The argument is Nivat's: every rational transduction factors
+    as $\tau(X) = \psi\bigl(\varphi^{-1}(X) \cap K\bigr)$ for morphisms
+    $\varphi, \psi$ and a regular $K$, and inverse morphism, intersection with
+    a regular set, and morphic image each preserve regularity. Jean Berstel,
+    *Transductions and Context-Free Languages* (Stuttgart: Teubner, 1979),
+    gives Nivat's theorem as III.4.1 and the closure as III.4.2; the book is
+    [available from the author](http://www-igm.univ-mlv.fr/~berstel/LivreTransductions/LivreTransductions.pdf).
+    Berstel writes "rational" where this post writes "regular"; over a free
+    monoid the two words name the same family.
 
 ## Writing it down so a machine can check it
 

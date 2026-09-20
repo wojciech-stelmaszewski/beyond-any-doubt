@@ -5,11 +5,16 @@ import { mathPlaceholder } from "./src/lib/math-placeholder.mjs";
 import { figureBlock } from "./src/lib/figure-block.mjs";
 import { calloutBlock } from "./src/lib/callout-block.mjs";
 import { mathjaxIntegration } from "./src/integrations/mathjax.mjs";
+import { leanSources } from "./src/integrations/lean-sources.mjs";
 
 export default defineConfig({
   site: "https://beyond-any-doubt.org",
   output: "static",
-  integrations: [mathjaxIntegration(), sitemap()],
+  integrations: [
+    mathjaxIntegration(),
+    leanSources({ libraries: ["Talemi"] }),
+    sitemap(),
+  ],
   markdown: {
     // Maths is only marked up here; it is typeset once per finished page by the
     // integration above, which is what makes \label and \eqref resolve.

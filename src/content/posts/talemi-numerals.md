@@ -768,19 +768,6 @@ length both worth 46, and likewise `kasate` and `yunalo` for 71. It is a small
 satisfaction to have the flaw in a twelfth-century exercise recorded as a
 theorem.
 
-> [!remark] Why the proofs avoid native_decide
-> Every proof here closes by reflexivity or by induction. On goals that are
-> pure computation it is tempting to reach for `native_decide`, which hands the
-> step to the compiler rather than to the kernel, and it is deliberately absent
-> throughout: it leaves an extra axiom in the theorem's list, and a theorem
-> resting on that is a theorem about a compiled binary. Exactly which axiom
-> depends on the toolchain — Lean once recorded a single `Lean.ofReduceBool`
-> for every such step and now mints a fresh one per call site — which is why
-> the check the build actually runs is an allowlist rather than a blocklist:
-> every result quoted here stands on the three axioms Lean's own logic uses
-> and nothing further, whatever a delegated step would have been called. The
-> honest tactic is also, here, fast enough.
-
 ## What formalising it exposes
 
 **Syntax is not semantics.** `kasatu` and `yunayu` are different trees that
@@ -1236,8 +1223,22 @@ from its axioms each time this site is built. The prose and the library follow
 the same arguments in the same order, so a paragraph above should correspond
 to a recognisable stretch of a file below. The library imports no mathematics
 library: integers, induction and reflexivity are the whole toolkit, which also
-means it can be read by someone who does not know one. The six files, in
-dependency order:
+means it can be read by someone who does not know one.
+
+> [!remark] Why the proofs avoid native_decide
+> Keeping the toolkit that small is a decision, and one tactic in particular is
+> kept out of it. On goals that are pure computation it is tempting to reach
+> for `native_decide`, which hands the step to the compiler rather than to the
+> kernel. It is deliberately absent throughout: it leaves an extra axiom in the
+> theorem's list, and a theorem resting on that is a theorem about a compiled
+> binary. Exactly which axiom depends on the toolchain — Lean once recorded a
+> single `Lean.ofReduceBool` for every such step and now mints a fresh one per
+> call site — which is why the check the build actually runs is an allowlist
+> rather than a blocklist: every result quoted here stands on the three axioms
+> Lean's own logic uses and nothing further, whatever a delegated step would
+> have been called. The honest tactic is also, here, fast enough.
+
+The six files, in dependency order:
 
 - [Talemi.lean](/lean/Talemi.lean) — the library root, and a map of the rest
 - [Numerals.lean](/lean/Talemi/Numerals.lean) — trees, values, syllables, and

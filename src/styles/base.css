@@ -69,6 +69,23 @@ pre {
   overflow-x: auto;
 }
 
+/*
+ * A quotation that survives to the output is a quoted source rather than a
+ * statement of the argument — the callouts have already claimed the second
+ * job. It is ruled on the left and set a shade quieter, so a long extract
+ * reads as something shown rather than something said.
+ */
+blockquote {
+  margin: calc(var(--step) * 7) 0;
+  padding-left: calc(var(--step) * 5);
+  border-left: 1px solid var(--rule-strong);
+  color: var(--ink-2);
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+
 hr {
   border: 0;
   border-top: 1px solid var(--rule);
@@ -138,6 +155,61 @@ th {
   font-family: var(--font-ui);
   font-size: 0.875rem;
   color: var(--ink-2);
+}
+
+/*
+ * Footnotes are apparatus rather than argument: ruled off, a size down, and
+ * numbered by the list itself.
+ *
+ * The generated markup marks the section heading for screen readers only. It
+ * is shown instead, because a numbered list arriving under the last section
+ * with no heading of its own reads as a continuation of that section.
+ */
+.footnotes {
+  margin-top: calc(var(--step) * 12);
+  padding-top: calc(var(--step) * 6);
+  border-top: 1px solid var(--rule);
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+}
+
+.footnotes h2 {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 calc(var(--step) * 5);
+}
+
+.footnotes ol {
+  margin: 0;
+  padding-left: calc(var(--step) * 6);
+}
+
+.footnotes li + li {
+  margin-top: calc(var(--step) * 4);
+}
+
+/*
+ * Zero line-height keeps a reference mark from opening up the line it sits
+ * on, which is otherwise the one visible cost of citing a source mid-sentence.
+ */
+sup a[data-footnote-ref] {
+  font-size: 0.75em;
+  line-height: 0;
+  padding-inline: 0.15em;
+  text-decoration: none;
+}
+
+sup a[data-footnote-ref]:hover {
+  text-decoration: underline;
+}
+
+.data-footnote-backref {
+  margin-left: 0.35em;
+  text-decoration: none;
 }
 
 /*

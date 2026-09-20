@@ -1222,21 +1222,28 @@ name; then he closed with the only request the document makes of anyone. *Qui
 legis, ora pro scriptore.* You who read, pray for the writer. It is the single
 sentence in the whole manuscript I did not have to reconstruct, hedge, or
 supply a missing root for. It arrived whole, it was meant for whoever got this
-far, and it asks for the one thing I was in a position to give. Having spent
-months taking from him, I gave it. There is nothing else to give a man who took
-such care to leave nothing to thank.
+far, and it asks for the one thing I was in a position to give. So I gave it.
+He left no name to thank and asked for nothing else, and after months of taking
+from him it was not much to have been asked for.
 
-Behind him stands the holy man at Mokissos, on whom the sources are silent, and
+Behind him stands the holy man at Mokissos, on whom the sources are silent and
 who is only *said* to have set the question at all. If he did, he set it to his
-disciples — which is to say he set it as an exercise, and it is a strange one
-only until it gives way. After that it is very simple indeed: count in twelves,
-and let a digit be owed as readily as held. Would he be proud that I solved it?
-I find I cannot say. He asked it of novices in Cappadocia, and it has come back
-to him by way of Padua, a shelf in Venice and a proof assistant, answered by
-someone who needed twelve hundred lines to be sure of an arithmetic those
-novices were presumably expected to see before supper. Perhaps that counts as
-solving it. Perhaps it is only the long way round to where he was already
-standing when he asked.
+disciples, which means he set it to be understood. And it is worth
+understanding. Strange as it looks on the page, once it gives way it is very
+simple: count in twelves, and let a digit be owed as readily as held. That is
+the whole of it — a small, clean idea, and a durable one. It survived a Greek
+codex, a translation by a man who said outright that he could not follow it,
+the loss of at least one line, and eight centuries of being worth nobody's
+attention.
+
+Would he be proud that I solved it? I have thought about that more than the
+question can really bear. I do not think he would have been very interested in
+me, and I find I do not mind. He set it so that someone would come to see what
+he had seen, and someone did — late, and by a route he could not have pictured,
+and needing a great deal more help than his disciples were given. The seeing is
+the same seeing. A man in Cappadocia arranged twelve syllables so that a mind
+meeting them fifteen hundred years later would end up standing where he had
+stood. I got there. Of everything written here, that is the part I am glad of.
 
 ## The Lean sources
 

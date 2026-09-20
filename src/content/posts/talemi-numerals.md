@@ -310,7 +310,15 @@ has both addends small enough to be plausible as bare roots at all; the others
 add 15, 22, 34, 27 or 41 to something. So F translates $10 + 8 = 18$.
 
 This is the one genuinely abductive step in the reconstruction. Everything
-after it is forced, and the check on the guess is that all six equations close.
+after it is forced — forced, that is, under the syllable hypothesis, and it is
+worth saying out loud how much that hypothesis is carrying. It holds that one
+syllable is one element of the numeral, that a bare root is a digit, that a
+recurring fragment means the same arithmetic thing every time it recurs, and
+that a word like `tetu` comes apart at all rather than being a single name for
+eighteen. Grant those and there is nothing further to choose. Refuse them and
+the six equations admit readings this post never looks at. The check on the
+guess, and on the hypothesis carrying it, is that all six equations close and
+the eight items the manuscript holds back fall out of the same machinery.
 
 Now look at B, whose result `petu` begins with the `pe` of F and ends with the
 `tu` of F's own result `tetu`. Its second addend `ri` is a bare root, so B must
@@ -489,21 +497,30 @@ chosen to fit the shape of the others and meaning nothing more than "the ninth
 root, whatever it was". Every claim below that mentions `ze` is a claim about
 the slot, not about the syllable.
 
-**A zero.** A zero *remainder* is forced under this grammar, and the argument
-is short. An exact multiple of
-twelve needs a zero in the units place: twenty-four is $0 + 12 \cdot 2$, and no
-other digit will do, because $\eqref{eq:add}$ with $d \ge 1$ gives at least
-$1 + 12k$ and $\eqref{eq:sub}$ would need a digit of twelve. Without a zero
-digit the language cannot say twenty-four. I will write it `o`, and then exact
-multiples of twelve go `onate` $= 72$, `onari` $= 84$, `onaze` $= 108$.
+**A zero remainder.** This much is forced; whether the language had an overt
+root for it is not. An exact multiple of twelve needs a zero in the units
+place: twenty-four is $0 + 12 \cdot 2$, and no other digit will do, because
+$\eqref{eq:add}$ with $d \ge 1$ gives at least $1 + 12k$ and $\eqref{eq:sub}$
+would need a digit of twelve. So the units slot has to be fillable by something
+that contributes nothing. For the formal model I give that slot the
+conventional root `o`, and then exact multiples of twelve go `onate` $= 72$,
+`onari` $= 84$, `onaze` $= 108$.
 
 > [!remark] How much of a zero?
 > Saying that the arithmetic needs a zero remainder is not the same as saying
-> the language had a word for nothing. A speaker might well have a syllable
-> that appears only inside compounds and never as an answer to "how many?", or
-> a zero morpheme, or some separate construction for exact multiples of twelve
-> that puts no root in that slot at all. The reconstruction needs the
-> remainder and establishes nothing whatever about the word.
+> the language had a word for nothing, and at least three arrangements fit
+> equally well. There may have been an overt root, as reconstructed here, used
+> inside compounds and perhaps never as an answer to "how many?". There may
+> have been a zero morpheme, nothing at all pronounced in the units position,
+> so that twenty-four was $\varnothing\text{-na-}\mathrm{mi}$ where I write
+> `onami`. Or exact multiples of twelve may have had a construction of their
+> own that does not use the units slot.
+>
+> The second is the linguistically interesting one, and nothing here can touch
+> it, for a reason worth stating: of the twenty words the manuscript actually
+> spells — sixteen in the equations, four more set for reading — not one
+> denotes an exact multiple of twelve. The corpus never exercises the slot at
+> all, so it cannot distinguish a root that is pronounced from one that is not.
 >
 > The formalisation is then more generous than the argument that motivates it,
 > and the gap is worth naming rather than hiding. `o` is an ordinary digit in
@@ -1200,7 +1217,8 @@ The boxes above are prose, so here is what they are called in the files, for
 anyone who wants to check that I have quoted them faithfully. Reading back is
 `parse_toks` and `toks_injective`; the infinity of spellings is
 `padded_injective`; the argument that the reconstruction had no choice about a
-zero is `multiple_needs_zero_head`; the reach of the system is `eval_encode`
+zero remainder is `multiple_needs_zero_head`; the reach of the system is
+`eval_encode`
 for the naturals,
 `eval_encodeInt` for the integers, and `additive_range` for the fragment
 without `sa`; the ceiling argument is `encode_shortest` and

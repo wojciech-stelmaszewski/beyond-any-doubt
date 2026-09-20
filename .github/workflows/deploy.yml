@@ -31,6 +31,13 @@ jobs:
       # that cannot be reproduced from it should fail here rather than ship.
       - run: npm ci
 
+      # The state diagram in the Talemi post is a drawing of the `parse`
+      # function the Lean proofs are about, and a drawing can drift from what
+      # it depicts. This replays every word up to length five through both and
+      # fails if they ever disagree. The expected verdicts are committed, so
+      # the check needs Node and nothing else.
+      - run: node scripts/check-automaton.mjs
+
       - run: npm run build
 
       # The custom domain lives in the repository's Pages settings, not in a

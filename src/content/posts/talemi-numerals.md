@@ -592,11 +592,15 @@ production would generate both forms and get the language wrong.
 
 That leaves two productions:
 
-```text
-Numeral ::= Digit
-          | Digit na Numeral      -- d + 12·N
-          | Digit sa Numeral      -- 12·N - d
-```
+$$
+\begin{array}{rcll}
+\mathit{Numeral} & \Coloneqq & \mathit{Digit} \\[2pt]
+ & \mid & \mathit{Digit}\;\,\mathrm{na}\;\,\mathit{Numeral}
+       & \quad d + 12N \\[2pt]
+ & \mid & \mathit{Digit}\;\,\mathrm{sa}\;\,\mathit{Numeral}
+       & \quad 12N - d
+\end{array}
+$$
 
 with $\eqref{eq:add}$ and $\eqref{eq:sub}$ as the semantics, and the fusion
 applied to the finished word.
@@ -626,7 +630,12 @@ as well, so twelve is `tu` and not `otu`, and $145$ is `kanatu` and not
 > rather than a production of the grammar, and it is itself finite-state, so
 > the surface forms are a rational image of a regular language and regular in
 > turn. Which is why the reader below can be a single left-to-right pass with
-> nothing to backtrack over.
+> nothing to backtrack over — three states rather than two, once the fused
+> `tu` is given one of its own.
+
+```figure
+{ "diagram": "talemi-reader", "caption": "The reader as a finite automaton. Two states carry the grammar proper — one wanting a root, one wanting a linker — and the third is what the fusion costs, since <code>tu</code> closes a word and nothing may follow it. A double ring marks a state a word may end in, which is why <code>kana</code> is refused: it stops having promised the linker something to link. Pick a word to walk it through, or click a syllable to stop there." }
+```
 
 ## Writing it down so a machine can check it
 

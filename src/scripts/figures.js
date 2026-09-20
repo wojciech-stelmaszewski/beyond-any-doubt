@@ -23,6 +23,19 @@ async function mountScene(container) {
   return createScene(container, build());
 }
 
+async function mountDiagram(container) {
+  const [{ createDiagram }, { DIAGRAMS }] = await Promise.all([
+    import("../lib/diagram/create-diagram.mjs"),
+    import("../lib/diagram/specs.mjs"),
+  ]);
+
+  const build = DIAGRAMS[container.dataset.diagram];
+  if (!build) throw new Error(`unknown diagram "${container.dataset.diagram}"`);
+
+  container.classList.add("is-live");
+  return createDiagram(container, build());
+}
+
 async function mountChart(container) {
   const [{ createChart, legend }, { CHARTS }] = await Promise.all([
     import("../lib/plot2d/create-chart.mjs"),
@@ -45,10 +58,20 @@ async function mount(container) {
   mounted.set(container, null);
 
   try {
-    const figure = container.dataset.scene
-      ? await mountScene(container)
-      : await mountChart(container);
+    let figure;
+    if (container.dataset.scene) figure = await mountScene(container);
+    else if (container.dataset.diagram) figure = await mountDiagram(container);
+    else figure = await mountChart(container);
     mounted.set(container, figure);
+
+    /*
+     * Mounting starts 300px early, so a figure can come to life below the
+     * fold. The observer below only reports changes, and being off screen at
+     * birth is not a change — without saying so here, an animated figure
+     * would play itself out before the reader ever reached it.
+     */
+    const box = container.getBoundingClientRect();
+    figure?.setActive?.(box.top < window.innerHeight && box.bottom > 0);
   } catch (error) {
     console.warn("[figures]", error);
     container.classList.add("has-failed");
@@ -73,7 +96,7 @@ const onScreen = new IntersectionObserver((entries) => {
   }
 });
 
-for (const container of document.querySelectorAll("[data-scene], [data-chart]")) {
+for (const container of document.querySelectorAll("[data-scene], [data-chart], [data-diagram]")) {
   nearViewport.observe(container);
   onScreen.observe(container);
 }

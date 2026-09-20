@@ -342,6 +342,151 @@ figure.plot {
   color: var(--ink-2);
 }
 
+/*
+ * A state diagram, with controls under it. Unlike the other two figures this
+ * one is read rather than steered, so it is not given a fixed aspect ratio:
+ * the drawing keeps its own proportions and the panel below takes the height
+ * the words in it need.
+ */
+.diagram {
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: calc(var(--step) * 4) calc(var(--step) * 4) calc(var(--step) * 5);
+}
+
+.diagram-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.diagram-state-label {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  fill: var(--ink);
+}
+
+.diagram-state-note,
+.diagram-edge-label {
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  fill: var(--ink-3);
+}
+
+.diagram-edge-label {
+  font-family: var(--font-mono);
+  fill: var(--ink-2);
+}
+
+/* The state being occupied, and the edge that led into it. */
+.diagram-state.is-current .diagram-ring {
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  fill: var(--accent-tint);
+}
+
+.diagram-edge.is-taken path {
+  stroke: var(--accent);
+  fill: var(--accent);
+}
+
+.diagram-edge.is-taken path[fill="none"] {
+  fill: none;
+  stroke-width: 2.4;
+}
+
+.diagram-edge path,
+.diagram-ring {
+  transition: stroke 140ms ease, fill 140ms ease, stroke-width 140ms ease;
+}
+
+.diagram-readout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: calc(var(--step) * 2) calc(var(--step) * 4);
+  margin-top: calc(var(--step) * 2);
+}
+
+.diagram-tape {
+  display: flex;
+  gap: calc(var(--step));
+}
+
+/*
+ * The word being walked. Each syllable is a button, so a reader who wants to
+ * stop in the middle can, rather than having to catch the animation.
+ */
+.diagram-syllable {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--ink-3);
+  background: none;
+  border: 1px solid transparent;
+  border-bottom-color: var(--rule);
+  border-radius: 3px;
+  padding: calc(var(--step)) calc(var(--step) * 2);
+  cursor: pointer;
+}
+
+.diagram-syllable.is-read {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
+.diagram-syllable.is-next {
+  color: var(--ink-2);
+  border-color: var(--rule-strong);
+}
+
+.diagram-syllable.is-stuck {
+  color: var(--counterexample);
+  border-color: var(--counterexample);
+}
+
+.diagram-verdict {
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+.diagram-verdict.is-rejected {
+  color: var(--counterexample);
+}
+
+.diagram-words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--step) * 2);
+  margin-top: calc(var(--step) * 4);
+  padding-top: calc(var(--step) * 4);
+  border-top: 1px solid var(--rule);
+}
+
+.diagram-word {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: calc(var(--step)) calc(var(--step) * 3);
+  cursor: pointer;
+}
+
+.diagram-word:hover {
+  border-color: var(--rule-strong);
+  color: var(--ink);
+}
+
+.diagram-word[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  color: var(--ink);
+}
+
 .figure-fallback {
   font-family: var(--font-ui);
   font-size: 0.875rem;

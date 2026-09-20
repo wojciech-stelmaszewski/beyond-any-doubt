@@ -46,8 +46,9 @@ end Digit
 
 `atom` is a bare root; `add12` and `sub12` are the two linkers. The second
 argument of a linker is a whole numeral, not a digit — that single choice is
-what makes the system recursive, and it is the one the corpus forces by way of
-`onatu` = 144. -/
+what makes the system recursive. The corpus never reaches deep enough to
+witness it; taking the rule unrestricted is the reconstruction's assumption,
+and the alternative would need a clause that nothing attests. -/
 
 inductive TNum where
   | atom  (d : Digit)
@@ -70,19 +71,15 @@ def eval : TNum → Int
 The corpus never shows `X-na-ka`. Thirteen is `katu`, not `kanaka`, so `tu` is
 the fused realisation of the linker `na` with the root `ka` — not a separate
 construction. `render` therefore emits `tu` for *every* `d + 12·1`, and the
-abstract grammar needs no production for it.
-
-One root has an allomorph: `ze` becomes `zi` before `tu`, giving `zitu` for 21.
-It is confined to that environment, which is the only one the corpus attests;
-`zenate` = 81 shows `ze` surviving intact before `na`. -/
+abstract grammar needs no production for it. -/
 
 /-- The syllables Talemi is spelled out of. `na` appears once, because the
 digit 4 and the additive linker really are the same syllable — the ambiguity
-this seems to invite is the subject of `parse_toks` below. `zi` and `sa` and
-`tu` are not digit roots, which is what makes the parse deterministic. -/
+this seems to invite is the subject of `parse_toks` below. `sa` and `tu` are
+not digit roots, which is what makes the parse deterministic. -/
 inductive Syl where
   | o | ka | mi | su | na | lo | te | ri | vo | ze | pe | yu
-  | zi | sa | tu
+  | sa | tu
 deriving DecidableEq, Repr
 
 /-- A digit root in digit position. -/
@@ -91,16 +88,11 @@ def Syl.ofDigit : Digit → Syl
   | .na => .na | .lo => .lo | .te => .te | .ri => .ri
   | .vo => .vo | .ze => .ze | .pe => .pe | .yu => .yu
 
-/-- The same, in the one environment that alters it. -/
-def Syl.ofDigitBeforeTu : Digit → Syl
-  | .ze => .zi
-  | d   => Syl.ofDigit d
-
 /-- The syllables of a numeral. -/
 def toks : TNum → List Syl
   | .atom d              => [Syl.ofDigit d]
   | .add12 d (.atom .ka) =>
-      if d = .o then [.tu] else [Syl.ofDigitBeforeTu d, .tu]
+      if d = .o then [.tu] else [Syl.ofDigit d, .tu]
   | .add12 d rest        => Syl.ofDigit d :: .na :: toks rest
   | .sub12 d rest        => Syl.ofDigit d :: .sa :: toks rest
 
@@ -110,7 +102,7 @@ def render (t : TNum) : String :=
     | .o  => "o"  | .ka => "ka" | .mi => "mi" | .su => "su"
     | .na => "na" | .lo => "lo" | .te => "te" | .ri => "ri"
     | .vo => "vo" | .ze => "ze" | .pe => "pe" | .yu => "yu"
-    | .zi => "zi" | .sa => "sa" | .tu => "tu")
+    | .sa => "sa" | .tu => "tu")
 
 /-! ## The grammar is unambiguous
 
@@ -124,25 +116,19 @@ The statement below is the machine-checked form of that claim. `parse` is
 written independently of `toks` — it is the reader's job, not the writer's —
 and recovers the tree from the syllables exactly. -/
 
-/-- The digit a syllable denotes *in digit position*. `zi`, `sa` and `tu` never
-occur there. -/
+/-- The digit a syllable denotes *in digit position*. `sa` and `tu` never occur
+there. -/
 def Syl.digit : Syl → Option Digit
   | .o  => some .o  | .ka => some .ka | .mi => some .mi | .su => some .su
   | .na => some .na | .lo => some .lo | .te => some .te | .ri => some .ri
   | .vo => some .vo | .ze => some .ze | .pe => some .pe | .yu => some .yu
-  | .zi | .sa | .tu => none
-
-/-- The digit a syllable denotes immediately before `tu`, where `zi` stands for
-`ze`. -/
-def Syl.digitBeforeTu : Syl → Option Digit
-  | .zi => some .ze
-  | s   => s.digit
+  | .sa | .tu => none
 
 def parse : List Syl → Option TNum
   | [.tu]    => some (.add12 .o (.atom .ka))
   | [s]      => (s.digit).map .atom
   | [s, .tu] =>
-      (s.digitBeforeTu).map fun d => .add12 d (.atom .ka)
+      (s.digit).map fun d => .add12 d (.atom .ka)
   | s :: .na :: rest =>
       match s.digit, parse rest with
       | some d, some n => some (.add12 d n)
@@ -156,10 +142,6 @@ def parse : List Syl → Option TNum
 theorem digit_ofDigit (d : Digit) : (Syl.ofDigit d).digit = some d := by
   cases d <;> rfl
 
-theorem digitBeforeTu_ofDigitBeforeTu (d : Digit) :
-    (Syl.ofDigitBeforeTu d).digitBeforeTu = some d := by
-  cases d <;> rfl
-
 /-- **Every Talemi numeral can be read back.** The surface form determines the
 syntax tree, homophonous `na` and all. -/
 theorem parse_toks (t : TNum) : parse (toks t) = some t := by
@@ -170,8 +152,7 @@ theorem parse_toks (t : TNum) : parse (toks t) = some t := by
     | .atom .ka =>
       by_cases h : d = .o
       · subst h; rfl
-      · simp only [toks, if_neg h, parse, digitBeforeTu_ofDigitBeforeTu,
-          Option.map_some]
+      · simp only [toks, if_neg h, parse, digit_ofDigit, Option.map_some]
     | .atom .o | .atom .mi | .atom .su | .atom .na | .atom .lo | .atom .te
     | .atom .ri | .atom .vo | .atom .ze | .atom .pe | .atom .yu
     | .add12 _ _ | .sub12 _ _ =>

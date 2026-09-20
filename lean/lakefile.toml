@@ -13,8 +13,10 @@ rev = "v4.33.1"
 name = "Banach"
 
 # The numeral system from the Talemi post. In `defaultTargets` because it is
-# finished work rather than exercises, and it imports no Mathlib at all, so it
-# costs the build about a second.
+# finished work rather than exercises. It imports no Mathlib at all, so most of
+# it elaborates in about a second; the ten seconds it actually costs are almost
+# entirely the brute-force count at the end of Talemi/Enumeration.lean, which
+# the kernel evaluates rather than the compiler.
 [[lean_lib]]
 name = "Talemi"
 

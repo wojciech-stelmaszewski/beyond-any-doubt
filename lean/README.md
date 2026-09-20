@@ -174,7 +174,7 @@ mean reproving the geometric series, which is a different lecture.
 
 ## The Talemi numerals
 
-`Talemi/`, two files, and a different kind of formalisation: not a theorem from
+`Talemi/`, five files, and a different kind of formalisation: not a theorem from
 a textbook but a reconstruction from evidence, where the risk is not that a step
 fails to follow but that the informal account quietly says more than the data
 supports.
@@ -192,15 +192,59 @@ theorem parse_toks (t : TNum) : parse (toks t) = some t
 what the writer meant, every time. Injectivity of the spelling follows in two
 lines.
 
-`Examples.lean` is the corpus as a test suite — every attested word spelled and
-valued — followed by the four things the corpus does *not* settle: that a number
-has several spellings, that `kasao` denotes −1, that depth is unbounded, and that
-zero-padding gives every number infinitely many forms, which is why counting them
-is the wrong question.
+The next three files chase the question the corpus cannot answer: what is the
+subtractive linker `sa` *for*?
 
-It imports no Mathlib. `Int`, induction and `rfl` are the whole toolkit, so the
-library elaborates in about a second — and `native_decide`, which would be the
-tempting tactic on goals that are pure computation, is deliberately absent:
+`Range.lean` rules out the obvious answer. `encode` gives every natural number
+a word, and never once uses `sa`; `encodeInt` gives every integer a word, and
+uses `sa` exactly for the negative ones. So above zero the subtractive
+construction adds no number at all.
+
+```
+theorem eval_encode (n : Nat) : eval (encode n) = (n : Int)
+theorem additive_range (v : Int) :
+    (∃ t, additive t = true ∧ eval t = v) ↔ 0 ≤ v
+```
+
+`Shortest.lean` rules out the second answer, that `sa` at least saves breath.
+It does not:
+
+```
+theorem encode_shortest (n : Nat) (t : TNum) (h : eval t = (n : Int)) :
+    (toks (encode n)).length ≤ (toks t).length
+```
+
+The proof turns on `cap k`, the largest value a `k`-syllable word can denote.
+It obeys a two-step recurrence rather than a one-step one, because the fusion
+`na ka → tu` lets the bottom rung cost one syllable instead of two.
+
+`Enumeration.lean` asks how often the shortest spelling is unique. Answering
+means enumerating spellings, so it first proves the enumeration complete
+(`mem_spellings`) and sound (`eval_of_mem_spellings`), and only then counts.
+Of the first four hundred numbers, forty-six have a single shortest spelling,
+and they fall in three runs ending at `cap 2`, `cap 3` and `cap 4`. That is
+`sub_le_cap_sub_eleven` showing through: a subtractive word lands eleven short
+of the ceiling for its length, so the eleven values just beneath each ceiling
+have no rival to tie with.
+
+`tie_counts_below_300` sharpens that from "unique or not" to the count itself,
+which turns out to be constant between ceilings and to drop to 1 over the
+eleven values before each of them.
+
+`Examples.lean` is the corpus as a test suite — every attested word spelled and
+valued, including the eight items the manuscript holds back as an exercise, two
+of which it asks for in a form that has no unique answer. Then, kept
+deliberately separate, the words the reconstruction adds rather than reads: the
+ninth root, the zero, and the deep recursion, none of which the manuscript
+shows. Then what the corpus does *not* settle: that a number has several
+spellings, that `kasao` denotes −1, that zero-padding gives every number
+infinitely many forms, and that `parse` accepts `kanaka` although no speaker
+would ever say it.
+
+It imports no Mathlib. `Int`, induction and `rfl` are the whole toolkit, so most
+of the library elaborates in about a second. The dozen seconds it actually
+costs are the two counts of ties, both `decide`: `native_decide` would be faster
+on a goal that is pure computation and is deliberately absent, because
 `verify.sh` fails on the `Lean.ofReduceBool` it leaves behind.
 
 ## Layout
@@ -218,7 +262,10 @@ lean/
   Talemi.lean           the other library root
   Talemi/
     Numerals.lean       syntax, semantics, and the unambiguity proof
-    Examples.lean       the attested corpus, and what it leaves open
+    Range.lean          which numbers the system names, and with which linker
+    Shortest.lean       the additive spelling is never the longer one
+    Enumeration.lean    counting the ties, on an enumeration proved exact
+    Examples.lean       the attested corpus, the reconstruction, the gaps
   Tutorial/             eight lessons from zero to reading the above
     Solutions/          one per lesson, and the proof they are solvable
   Scratch.lean          a playground, in no build target; break it freely

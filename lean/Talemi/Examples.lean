@@ -9,7 +9,7 @@ are easy to state wrongly in prose — redundancy, negativity, recursion, and th
 unbounded padding that makes "how many spellings does a number have?" the wrong
 question.
 -/
-import Talemi.Numerals
+import Talemi.Enumeration
 
 namespace Talemi.Corpus
 
@@ -80,28 +80,75 @@ theorem sums :
     eval lonasu + eval tetu = eval kasalo := by
   refine ⟨rfl, rfl, rfl, rfl, rfl, rfl⟩
 
-/-! ### The second leaf -/
+/-! ### The manuscript's own test
 
-def ze     : TNum := .atom .ze
-def zitu   : TNum := .add12 .ze (.atom .ka)
-def onari  : TNum := .add12 .o (.atom .ri)
-def onatu  : TNum := .add12 .o (.add12 .o (.atom .ka))
-def pesana : TNum := .sub12 .pe (.atom .na)
+None of the eight items below was used to fit the system, which is what makes
+them worth checking. Four words the reader is asked to evaluate, and four
+numbers the reader is asked to spell. -/
 
-theorem second_leaf :
-    [ze, zitu, onari, onatu, pesana].map (fun t => (render t, eval t))
-      = [("ze", 9), ("zitu", 21), ("onari", 84), ("onatu", 144),
-        ("pesana", 38)] := by
+def yutu   : TNum := .add12 .yu (.atom .ka)
+def minasu : TNum := .add12 .mi (.atom .su)
+def susalo : TNum := .sub12 .su (.atom .lo)
+def rinana : TNum := .add12 .ri (.atom .na)
+
+theorem reading_task :
+    [yutu, minasu, susalo, rinana].map (fun t => (render t, eval t))
+      = [("yutu", 23), ("minasu", 38), ("susalo", 57), ("rinana", 55)] := by
   rfl
 
-/-- The allomorph is surface only. `zitu` is spelled with `zi`, but the tree it
-spells holds the digit `ze` — nine — and `eval` never sees the alternation. -/
-theorem zitu_holds_ze : zitu = .add12 .ze (.atom .ka) ∧ eval zitu = 21 :=
-  ⟨rfl, rfl⟩
+def lotu   : TNum := .add12 .lo (.atom .ka)
+def lonami : TNum := .add12 .lo (.atom .mi)
+def penasu : TNum := .add12 .pe (.atom .su)
+def yunalo : TNum := .add12 .yu (.atom .lo)
 
-/-- `ze` survives intact before the additive linker, which is why the
-alternation must be stated for the `_tu` environment and not in general. -/
-theorem ze_intact_before_na : render (.add12 .ze (.atom .te)) = "zenate" := by rfl
+theorem writing_task :
+    [lotu, lonami, penasu, yunalo].map (fun t => (render t, eval t))
+      = [("lotu", 17), ("lonami", 29), ("penasu", 46), ("yunalo", 71)] := by
+  rfl
+
+/-- Two of the four numbers the manuscript asks for have a second answer of
+exactly the same length, which the question does not allow for. -/
+def misana : TNum := .sub12 .mi (.atom .na)
+def kasate : TNum := .sub12 .ka (.atom .te)
+
+theorem writing_task_ambiguous :
+    (render misana, eval misana) = ("misana", 46) ∧
+    (render kasate, eval kasate) = ("kasate", 71) ∧
+    len misana = len penasu ∧ len kasate = len yunalo ∧
+    misana ≠ penasu ∧ kasate ≠ yunalo := by
+  refine ⟨rfl, rfl, rfl, rfl, ?_, ?_⟩ <;> decide
+
+/-! ### The reconstructed part
+
+None of the words below is attested. Two roots the corpus never shows — the
+ninth digit and the zero — and two freedoms it never exercises, unbounded
+recursion and a free choice of linker, are assumptions of the reconstruction
+rather than readings of the manuscript. They are stated here as words so that
+the assumptions have a concrete shape, and are kept apart from the corpus above
+so that nothing can quietly borrow the corpus's authority. -/
+
+def ze     : TNum := .atom .ze
+def zetu   : TNum := .add12 .ze (.atom .ka)
+def onari  : TNum := .add12 .o (.atom .ri)
+def onatu  : TNum := .add12 .o (.add12 .o (.atom .ka))
+
+theorem reconstructed_words :
+    [ze, zetu, onari, onatu].map (fun t => (render t, eval t))
+      = [("ze", 9), ("zetu", 21), ("onari", 84), ("onatu", 144)] := by
+  rfl
+
+/-- **Why a zero is forced.** A compound denoting an exact multiple of twelve
+must have the zero root in its leading position, under either linker. So
+without a zero digit the language cannot say 24 at all, and the reconstruction
+has no choice about this one. -/
+theorem multiple_needs_zero_head (d : Digit) (rest : TNum) (k : Int)
+    (h : eval (.add12 d rest) = 12 * k ∨ eval (.sub12 d rest) = 12 * k) :
+    d = .o := by
+  cases d
+  · rfl
+  all_goals
+    rcases h with h | h <;>
+      simp only [eval, Digit.value] at h <;> omega
 
 /-! ### What the corpus does not settle
 
@@ -109,10 +156,10 @@ Four facts that the informal solution states in prose, where each of them is
 easy to state slightly wrongly. -/
 
 /-- **Redundancy.** Two different trees, one number — twice over. The corpus
-gives no ground for calling either spelling canonical. -/
-theorem redundant_38 :
-    eval (.add12 .mi (.atom .su)) = eval pesana ∧
-      (.add12 .mi (.atom .su) : TNum) ≠ pesana :=
+gives no ground for calling either spelling canonical, and in the case of 46 it
+is the manuscript's own exercise that asks for "the" answer. -/
+theorem redundant_46 :
+    eval penasu = eval misana ∧ penasu ≠ misana :=
   ⟨rfl, by decide⟩
 
 theorem redundant_143 :
@@ -186,19 +233,134 @@ theorem padding_examples :
       = [("ka", 1), ("kanao", 1), ("kanaonao", 1), ("kanaonaonao", 1)] := by
   rfl
 
+/-! ### The system named
+
+`encode` is long division read backwards, and it gives a word to every natural
+number. Nothing below needed a corpus entry: the word for 20735 is as much
+Talemi as `petu` is.
+
+`encode` recurses on a shrinking quotient rather than on a constructor, so it
+does not reduce on its own and the examples name the trees explicitly. -/
+
+def yunami         : TNum := .add12 .yu (.atom .mi)
+def onaonatu       : TNum := .add12 .o (.add12 .o (.add12 .o (.atom .ka)))
+def yunayunayunayu : TNum := .add12 .yu (.add12 .yu (.add12 .yu (.atom .yu)))
+
+theorem encode_words :
+    encode 35 = yunami ∧ encode 1728 = onaonatu ∧
+      encode 20735 = yunayunayunayu := by
+  refine ⟨?_, ?_, ?_⟩ <;>
+    simp [yunami, onaonatu, yunayunayunayu, encode, Digit.ofResidue]
+
+theorem naming :
+    [yunami, onaonatu, yunayunayunayu].map (fun t => (render t, eval t))
+      = [("yunami", 35), ("onaonatu", 1728), ("yunayunayunayu", 20735)] := by
+  rfl
+
+/-- **Nothing above zero needs `sa`.** `encode` reaches every natural number
+and never once reaches for the subtractive linker, so the sixteen attested
+words could have got by with `na` alone. -/
+theorem additive_suffices (n : Nat) :
+    additive (encode n) = true ∧ eval (encode n) = (n : Int) :=
+  ⟨additive_encode n, eval_encode n⟩
+
+/-! ### What `sa` is for
+
+The additive fragment is exactly the non-negative integers — `additive_range`
+— so `sa` reaches nothing above zero and everything below it. These are the
+words for four negative numbers, and every one of them contains `sa`. -/
+
+def kasao     : TNum := .sub12 .ka (.atom .o)
+def onakasao  : TNum := .add12 .o (.sub12 .ka (.atom .o))
+def yunamisao : TNum := .add12 .yu (.sub12 .mi (.atom .o))
+def vonazesao : TNum := .add12 .vo (.sub12 .ze (.atom .o))
+
+theorem encode_negatives :
+    encodeInt (-1) = kasao ∧ encodeInt (-12) = onakasao ∧
+      encodeInt (-13) = yunamisao ∧ encodeInt (-100) = vonazesao := by
+  refine ⟨?_, ?_, ?_, ?_⟩ <;>
+    simp [kasao, onakasao, yunamisao, vonazesao, encodeInt, Digit.ofResidue]
+
+theorem negatives :
+    [kasao, onakasao, yunamisao, vonazesao].map
+        (fun t => (render t, eval t, additive t))
+      = [("kasao", -1, false), ("onakasao", -12, false),
+        ("yunamisao", -13, false), ("vonazesao", -100, false)] := by
+  rfl
+
+/-! ### `sa` buys no brevity either
+
+Having failed to add a number, the subtractive linker might still have earned
+its place by saving a syllable, the way `IX` beats `VIIII`. It does not: the
+additive spelling is always among the shortest. -/
+
+/-- The corpus word for 35 and the additive word for 35 are different words of
+the same length. -/
+theorem tie_at_35 :
+    render kasasu = "kasasu" ∧ render yunami = "yunami" ∧
+      eval kasasu = 35 ∧ eval yunami = 35 ∧ kasasu ≠ yunami ∧
+      (toks kasasu).length = (toks yunami).length :=
+  ⟨rfl, rfl, rfl, rfl, by decide, rfl⟩
+
+/-- And both of them are as short as 35 can be said, so the tie is real: there
+is no shortest spelling of 35, only two of them. -/
+theorem both_shortest_35 : IsShortest 35 kasasu ∧ IsShortest 35 yunami :=
+  ⟨isShortest_of_mem (by decide) (w := yunami) (by decide) (by decide),
+    isShortest_of_mem (by decide) (w := yunami) (by decide) (by decide)⟩
+
+/-- Thirteen, by contrast, has one shortest spelling and no other. The
+difference is the fusion: `katu` saves a syllable that no subtractive rival
+can save. -/
+theorem thirteen_unique (t u : TNum)
+    (ht : IsShortest 13 t) (hu : IsShortest 13 u) : t = u :=
+  unique_of_uniqueShortest (by decide) (w := katu) (by decide) (by decide) ht hu
+
+theorem thirteen_spelled : render katu = "katu" ∧ eval katu = 13 :=
+  ⟨rfl, rfl⟩
+
+/-! ### Reading is easier than speaking
+
+`parse_toks` says every word can be read back. It does not say the reader
+rejects everything that is not a word, and `parse` does not: it happily takes
+`kanaka` for thirteen. No speaker would say it — `toks` emits `katu` — so the
+grammar of comprehension here is strictly wider than the grammar of
+production. Tightening `parse` would be easy; whether a language ought to have
+a reader stricter than its speakers is not a question the manuscript
+answers. -/
+
+theorem kanaka_readable :
+    parse [.ka, .na, .ka] = some (.add12 .ka (.atom .ka)) := by rfl
+
+theorem kanaka_unsayable :
+    toks (.add12 .ka (.atom .ka)) = [.ka, .tu] ∧
+      toks (.add12 .ka (.atom .ka)) ≠ [.ka, .na, .ka] :=
+  ⟨rfl, by decide⟩
+
 /-! ### Provenance
 
 Lean lists the axioms each theorem rests on. Expect `propext` where `simp` was
-used and nothing at all where it was not. What must *not* appear is
-`Lean.ofReduceBool`: that is what `native_decide` leaves behind, and it means a
-step was handed to the compiler instead of being checked by the kernel.
-`scripts/verify.sh` fails the build on it. -/
+used, and `Quot.sound` with `Classical.choice` wherever `encode` is involved,
+since it recurses on a shrinking quotient rather than on a constructor. What
+must *not* appear is `Lean.ofReduceBool`: that is what `native_decide` leaves
+behind, and it means a step was handed to the compiler instead of being checked
+by the kernel. This repository's verification step fails the build on it, which
+is why the count of ties is a `decide` — slow, and checked. -/
 
 #print axioms TNum.parse_toks
 #print axioms TNum.toks_injective
 #print axioms spelling
 #print axioms sums
-#print axioms second_leaf
+#print axioms reading_task
+#print axioms writing_task
+#print axioms writing_task_ambiguous
+#print axioms reconstructed_words
+#print axioms multiple_needs_zero_head
 #print axioms padded_injective
+#print axioms TNum.eval_encode
+#print axioms TNum.eval_encodeInt
+#print axioms TNum.additive_range
+#print axioms TNum.encode_shortest
+#print axioms TNum.unique_shortest_below_400
+#print axioms TNum.tie_counts_below_300
 
 end Talemi.Corpus

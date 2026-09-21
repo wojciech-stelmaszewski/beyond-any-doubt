@@ -4,8 +4,13 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
+  overflow-x: clip;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
@@ -25,9 +30,19 @@ body {
  * eaten out of it by border-box.
  */
 .shell {
-  max-width: calc(var(--measure) + var(--gutter) * 2);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: min(100%, calc(var(--measure) + var(--gutter) * 2));
   margin-inline: auto;
   padding: calc(var(--step) * 12) var(--gutter);
+}
+
+article,
+.post-with-toc,
+.post-prose {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
 
 h1,
@@ -35,6 +50,54 @@ h2,
 h3 {
   line-height: 1.25;
   letter-spacing: -0.01em;
+}
+
+h2,
+h3,
+h4 {
+  scroll-margin-top: calc(var(--step) * 8);
+}
+
+/*
+ * The "#" is drawn in CSS so it never becomes part of the heading's text
+ * (and therefore never part of the slug). It stays quiet until the heading
+ * is hovered or the link itself is focused.
+ */
+.heading-anchor {
+  margin-left: 0.4em;
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-size: 0.7em;
+  color: var(--ink-3);
+  text-decoration: none;
+  opacity: 0;
+}
+
+.heading-anchor::before {
+  content: "#";
+}
+
+.heading-anchor:visited {
+  color: var(--ink-3);
+}
+
+h2:hover .heading-anchor,
+h3:hover .heading-anchor,
+h4:hover .heading-anchor,
+.heading-anchor:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .heading-anchor {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 a {
@@ -60,13 +123,24 @@ code,
 pre {
   font-family: var(--font-mono);
   font-size: 0.9em;
+  overflow-wrap: anywhere;
 }
 
 pre {
   background: var(--paper-sunken);
   padding: calc(var(--step) * 4);
   border-radius: 4px;
+  max-width: 100%;
   overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 40rem) {
+  pre {
+    font-size: 0.8em;
+    padding: calc(var(--step) * 3);
+  }
 }
 
 /*
@@ -97,18 +171,20 @@ hr {
  * under the last row — rather than boxed. Vertical lines and row stripes would
  * both add ink that the alignment already provides.
  *
- * `display: block` is what lets a table too wide for the measure scroll inside
- * the column instead of widening the page. It costs the table its automatic
- * full-bleed width, which is why `min-width` puts that back.
+ * The scroll lives on `.table-scroll`, not on the table: overflow on <table>
+ * is ignored on iOS and the row then widens the page.
  */
-table {
-  display: block;
-  width: max-content;
-  min-width: 100%;
+.table-scroll {
   max-width: 100%;
-  overflow-x: auto;
-  border-collapse: collapse;
   margin: calc(var(--step) * 7) 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
   font-variant-numeric: tabular-nums;
 }
 
@@ -126,6 +202,7 @@ td {
   padding: calc(var(--step) * 2) calc(var(--step) * 5);
   text-align: left;
   vertical-align: baseline;
+  overflow-wrap: anywhere;
 }
 
 /*
@@ -148,13 +225,152 @@ th {
   font-weight: 600;
   letter-spacing: 0.04em;
   color: var(--ink-2);
-  white-space: nowrap;
+}
+
+@media (max-width: 40rem) {
+  .table-scroll {
+    overflow-x: visible;
+  }
+
+  table,
+  thead,
+  tbody,
+  tr,
+  th,
+  td {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    border: 0;
+  }
+
+  thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+  tbody {
+    border: 0;
+  }
+
+  tr + tr {
+    margin-top: calc(var(--step) * 5);
+    padding-top: calc(var(--step) * 4);
+    border-top: 1px solid var(--rule);
+  }
+
+  th,
+  td {
+    padding: calc(var(--step)) 0;
+  }
+
+  th:first-child,
+  td:first-child,
+  th:last-child,
+  td:last-child {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  td + td {
+    color: var(--ink-2);
+  }
 }
 
 .meta {
   font-family: var(--font-ui);
   font-size: 0.875rem;
   color: var(--ink-2);
+}
+
+.toc {
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--ink-2);
+  margin: 0 0 calc(var(--step) * 8);
+  overflow-wrap: anywhere;
+}
+
+.toc-fold > summary {
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: var(--ink-3);
+  list-style: none;
+}
+
+.toc-fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+.toc ol {
+  list-style: none;
+  margin: calc(var(--step) * 3) 0 0;
+  padding: 0;
+}
+
+.toc ol ol {
+  margin: calc(var(--step) * 2) 0 calc(var(--step) * 2) 0;
+  padding-left: calc(var(--step) * 4);
+  border-left: 1px solid var(--rule);
+}
+
+.toc li + li {
+  margin-top: calc(var(--step) * 1.5);
+}
+
+.toc a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.toc a:visited {
+  color: inherit;
+}
+
+.toc a:hover,
+.toc a[aria-current="true"] {
+  color: var(--accent);
+}
+
+@media (min-width: 78rem) {
+  .shell:has(.toc) {
+    max-width: min(100%, calc(16rem + var(--measure) + var(--gutter) * 3));
+  }
+
+  .post-with-toc {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: calc(var(--gutter) * 1.5);
+    align-items: start;
+  }
+
+  .toc {
+    position: sticky;
+    top: calc(var(--step) * 8);
+    max-height: calc(100vh - var(--step) * 16);
+    overflow: auto;
+    margin-bottom: 0;
+    padding-right: calc(var(--step) * 2);
+  }
+
+  .toc-fold > summary {
+    display: none;
+  }
+
+  /* Closed <details> hides its body; the rail must stay readable before JS. */
+  .toc-fold > ol {
+    display: block;
+  }
 }
 
 /*
@@ -213,18 +429,32 @@ sup a[data-footnote-ref]:hover {
 }
 
 /*
- * Display maths is a block of its own, so a wide equation is bounded by the
- * column and can scroll inside it. The scrolling itself is MathJax's, set up by
- * displayOverflow in the typesetting step; overriding overflow here would undo
- * the min-width reset that makes it work.
+ * Display maths stays inside the column. MathJax writes an explicit width on
+ * the SVG; without a max-width that box is wider than a phone and the page
+ * scrolls sideways. Scaling the SVG keeps the expression intact. An inner
+ * scrollbar is only the fallback for anything that still will not shrink.
  */
-.math-display {
+.math-display,
+mjx-container[display="true"],
+mjx-container[display] {
   display: block;
   max-width: 100%;
+  min-width: 0 !important;
 }
 
-mjx-container[display="true"] {
+mjx-container[display="true"],
+mjx-container[display] {
   padding-block: calc(var(--step) * 2);
+  overflow-x: auto;
+}
+
+mjx-container[display="true"] > svg,
+mjx-container[display] > svg,
+.math-display svg {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  width: auto;
+  height: auto !important;
 }
 
 /*
@@ -233,8 +463,29 @@ mjx-container[display="true"] {
  */
 figure.plot {
   margin: calc(var(--step) * 11) 0;
-  width: min(94vw, 62rem);
-  margin-inline: calc(50% - min(47vw, 31rem));
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 48rem) {
+  figure.plot {
+    width: min(94vw, 62rem);
+    max-width: none;
+    margin-inline: calc(50% - min(47vw, 31rem));
+  }
+}
+
+/*
+ * The 94vw pull is relative to the viewport, not the prose column. Once the
+ * TOC sits in a rail it occupies that left strip, and the figure lands on
+ * top of it. Keep the figure in its grid cell.
+ */
+@media (min-width: 78rem) {
+  figure.plot {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+  }
 }
 
 /*
@@ -597,6 +848,15 @@ mark {
   border-radius: 0 4px 4px 0;
   padding: calc(var(--step) * 4) calc(var(--step) * 5);
   margin: calc(var(--step) * 7) 0;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+@media (max-width: 40rem) {
+  .callout {
+    padding: calc(var(--step) * 3) calc(var(--step) * 3);
+  }
 }
 
 .callout.is-definition {

@@ -147,7 +147,7 @@ writeFileSync(
     {
       name: "Beyond Any Doubt",
       short_name: "Beyond Any Doubt",
-      description: "Advanced mathematics, worked through in full.",
+      description: "It's the mathematics, stupid!",
       start_url: "/",
       display: "browser",
       background_color: "#faf8f4",

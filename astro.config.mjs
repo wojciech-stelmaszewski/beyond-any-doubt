@@ -4,6 +4,8 @@ import { satteri } from "@astrojs/markdown-satteri";
 import { mathPlaceholder } from "./src/lib/math-placeholder.mjs";
 import { figureBlock } from "./src/lib/figure-block.mjs";
 import { calloutBlock } from "./src/lib/callout-block.mjs";
+import { headingAnchor } from "./src/lib/heading-anchor.mjs";
+import { tableWrap } from "./src/lib/table-wrap.mjs";
 import { mathjaxIntegration } from "./src/integrations/mathjax.mjs";
 import { leanSources } from "./src/integrations/lean-sources.mjs";
 
@@ -21,7 +23,7 @@ export default defineConfig({
     processor: satteri({
       features: { math: { singleDollarTextMath: true } },
       mdastPlugins: [mathPlaceholder(), figureBlock()],
-      hastPlugins: [calloutBlock()],
+      hastPlugins: [calloutBlock(), headingAnchor(), tableWrap()],
     }),
   },
 });

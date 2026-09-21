@@ -225,6 +225,25 @@ another.
     Constantinople throughout the period, and Greek manuscripts came west along
     that route in quantity.
 
+[^milesian]: The system is the Milesian (Ionic) alphabetic numerals:
+    twenty-seven signs in three nines, so a number is a sum of letter-values
+    rather than a place-value string. The account to start from is T. L.
+    Heath, *A History of Greek Mathematics*, vol. 1 (Oxford: Clarendon Press,
+    1921), 31–36
+    ([the 1921 text](https://wilbourhall.org/pdfs/heath/HeathVolI.pdf)).
+    Heath is also the place to catch the stigma. The sixth sign is the old
+    *digamma*; by the seventh or eighth century it had come to be written in a
+    form that scribes then called stigma from its likeness to the σ–τ
+    ligature. A reader who looks for a sigma in μϛʹ has therefore made the
+    mistake twice — once of alphabet, and once of century. The free-standing
+    keraia that marks a letter as a number is itself a later habit; earlier
+    practice was often an overbar. The scribe's Roman spellings (`XXXXV`,
+    `LVIIII`) are the ordinary medieval ones, not an archaism: subtractive
+    `XL` and `IX` are the forms that print later made look obligatory. The
+    modern handbook for both systems is Stephen Chrisomalis, *Numerical
+    Notation: A Comparative History* (Cambridge: Cambridge University Press,
+    2010).
+
 ## The puzzle in modern notation
 
 Three things have to be changed before any of this can be worked on, and none
@@ -240,7 +259,7 @@ numerals agree throughout, and they are worth a second look: the scribe writes
 `XXXXV`, `XXXXVII`, `LVIIII`, never `XLV` or `LIX`. His own numerals are purely
 additive. That he did not modernise them is a small sign he was not
 modernising anything else either — and it is quietly funny, given that the
-system he is transmitting turns out to subtract.
+system he is transmitting turns out to subtract.[^milesian]
 
 **The transliteration.** Greek ου spells `u`, and β at this date spells `v`, so
 βοτου is `votu`. The one that matters is ιου, which the scribe Latinises as
@@ -253,18 +272,24 @@ the same sound the codex writes ιου and the scribe writes `iu`.
 equations over $\mathbb{N}$,
 
 ```text
-10 + 8  = 18      34 + 11 = 45
-15 + 7  = 22      27 + 20 = 47
-22 + 13 = 35      41 + 18 = 59
+10 + 8  = 18
+15 + 7  = 22
+22 + 13 = 35
+34 + 11 = 45
+27 + 20 = 47
+41 + 18 = 59
 ```
 
 and the second is six equations over words, in an order the scribe has told us
 is not the same:
 
 ```text
-A)  petu   + katu = kasasu    D)  penami + yu   = susana
-B)  sutu   + ri   = petu      E)  lonasu + tetu = kasalo
-C)  sunami + votu = kasana    F)  pe     + vo   = tetu
+A)  petu   + katu = kasasu
+B)  sutu   + ri   = petu
+C)  sunami + votu = kasana
+D)  penami + yu   = susana
+E)  lonasu + tetu = kasalo
+F)  pe     + vo   = tetu
 ```
 
 Now the task can be stated. Sixteen distinct words appear. We are looking for a
@@ -296,7 +321,7 @@ that grammar. The rest of this post finds all three, and then checks them.
 > Everything needed is above, and the pleasure of the thing is in finding the
 > base yourself. The rest of this post gives it away in the next section.
 
-## Form before meaning
+### Form before meaning
 
 The first useful move is not to guess at meanings. It is to look at shapes.
 
@@ -330,7 +355,7 @@ vo = 8       tetu = 18
 ri = 7       sutu = 15
 ```
 
-## The ending that means twelve
+### The ending that means twelve
 
 Compare `pe` with `petu`. Ten against twenty-two: the ending `tu` contributes
 exactly twelve. That immediately predicts `su` $= 15 - 12 = 3$ and
@@ -344,7 +369,7 @@ exactly twelve. That immediately predicts `su` $= 15 - 12 = 3$ and
 That last point is the transferable one. In a puzzle of this kind, the base
 announces itself as a *difference*, long before any word for it turns up.
 
-## The remaining four equations
+### The remaining four equations
 
 With `petu` $= 22$ in hand, equation A is determined: the only decimal equation
 with 22 as an addend is $22 + 13 = 35$, so `katu` $= 13$ and therefore
@@ -382,15 +407,18 @@ Everything else in the corpus now checks itself — `votu` $= 20$,
 `lonasu` $= 41$, `kasana` $= 47$ — and the correspondence is:
 
 ```text
-F)  10 + 8  = 18       D)  34 + 11 = 45
-B)  15 + 7  = 22       C)  27 + 20 = 47
-A)  22 + 13 = 35       E)  41 + 18 = 59
+F)  10 + 8  = 18
+B)  15 + 7  = 22
+A)  22 + 13 = 35
+D)  34 + 11 = 45
+C)  27 + 20 = 47
+E)  41 + 18 = 59
 ```
 
 Note that `na` leads a double life: the digit 4, and the additive linker. I will
 come back to that, because it looks like trouble and turns out not to be.
 
-## The manuscript's own test
+### The manuscript's own test
 
 That is the first task answered and the second one guessed at. The third and
 fourth are what decide whether the guess was worth making, because nothing in
@@ -414,10 +442,12 @@ The four numbers go back the other way, and here something happens that the
 manuscript gives no sign of noticing:
 
 ```text
-17  =  5 + 12        lotu
-29  =  5 + 12 · 2    lonami
-46  = 10 + 12 · 3    penasu     or   12 · 4 - 2    misana
-71  = 11 + 12 · 5    yunalo     or   12 · 6 - 1    kasate
+17  =  5 + 12         lotu
+29  =  5 + 12 · 2     lonami
+46  = 10 + 12 · 3     penasu
+    or 12 · 4 - 2     misana
+71  = 11 + 12 · 5     yunalo
+    or 12 · 6 - 1     kasate
 ```
 
 Two of the four have two answers apiece, of the same length, with nothing to
@@ -426,16 +456,29 @@ quietly assumed there is one way to do it, and for 46 and 71 there is not. That
 is the first crack in the system, it appears in the manuscript's own exercises,
 and the rest of this post is largely about how wide it goes.
 
-## The hole in the middle
+## The reconstructed system
+
+The six equations fix a fragment. What remains is to say what the language is
+— including the root the corpus never wrote, and the recursion it never needed
+to.
+
+### The hole in the middle
 
 Collect the roots the corpus has given us, and something is wrong with the
 list:
 
 ```text
-ka = 1     lo = 5      ?? = 9
-mi = 2     te = 6      pe = 10
-su = 3     ri = 7      yu = 11
-na = 4     vo = 8
+ka = 1
+mi = 2
+su = 3
+na = 4
+lo = 5
+te = 6
+ri = 7
+vo = 8
+?? = 9
+pe = 10
+yu = 11
 ```
 
 Every digit from 1 to 11 turns up somewhere in the corpus except nine. Not
@@ -484,7 +527,7 @@ listed together they look less like four gaps than like one:
 - nothing says whether the $N$ in $\eqref{eq:add}$ may be more than a single
   root.
 
-## Completing the system
+### Completing the system
 
 From here I stop reading and start proposing. What follows is a reconstruction
 — the smallest set of assumptions I can find that turns the fragment into a
@@ -581,7 +624,7 @@ Everything after this point is about the reconstructed system. Where it turns
 out to behave badly — and it does, in a way I did not expect — the fault may be
 the language's or may be mine, and I will say which cases I think are which.
 
-## The grammar
+### The grammar
 
 One subtlety deserves to be stated before the grammar rather than after it.
 Thirteen is `katu`, never `kanaka`. By $\eqref{eq:add}$ those would be the same
@@ -593,13 +636,14 @@ production would generate both forms and get the language wrong.
 That leaves two productions:
 
 $$
-\begin{array}{rcll}
-\mathit{Numeral} & \Coloneqq & \mathit{Digit} \\[2pt]
- & \mid & \mathit{Digit}\;\,\mathrm{na}\;\,\mathit{Numeral}
-       & \quad d + 12N \\[2pt]
- & \mid & \mathit{Digit}\;\,\mathrm{sa}\;\,\mathit{Numeral}
-       & \quad 12N - d
-\end{array}
+\begin{aligned}
+\mathit{Numeral}
+  &\Coloneqq \mathit{Digit} \\
+  &\mid\ \mathit{Digit}\ \mathrm{na}\ \mathit{Numeral} \\
+  &\qquad d + 12N \\
+  &\mid\ \mathit{Digit}\ \mathrm{sa}\ \mathit{Numeral} \\
+  &\qquad 12N - d
+\end{aligned}
 $$
 
 with $\eqref{eq:add}$ and $\eqref{eq:sub}$ as the semantics, and the fusion
@@ -702,13 +746,16 @@ four clauses where $\operatorname{val}$ has three:
 
 $$
 \begin{aligned}
-\operatorname{say}(d) &= \langle d \rangle, \\
-\operatorname{say}(d\text{-na-}\mathrm{ka}) &= \langle d, \text{tu} \rangle,
-  \quad\text{or } \langle \text{tu} \rangle \text{ when } d = \mathrm{o}, \\
-\operatorname{say}(d\text{-na-}N) &= \langle d, \text{na} \rangle
-  \frown \operatorname{say}(N), \\
-\operatorname{say}(d\text{-sa-}N) &= \langle d, \text{sa} \rangle
-  \frown \operatorname{say}(N).
+\operatorname{say}(d)
+  &= \langle d \rangle, \\
+\operatorname{say}(d\text{-na-}\mathrm{ka})
+  &= \langle d, \text{tu} \rangle, \\
+  &\phantom{=} \text{or }\langle \text{tu} \rangle
+    \text{ when } d = \mathrm{o}, \\
+\operatorname{say}(d\text{-na-}N)
+  &= \langle d, \text{na} \rangle \frown \operatorname{say}(N), \\
+\operatorname{say}(d\text{-sa-}N)
+  &= \langle d, \text{sa} \rangle \frown \operatorname{say}(N).
 \end{aligned}
 $$
 
@@ -717,7 +764,7 @@ that is the whole of the fusion: `kanaka` is not discouraged, it is unsayable,
 because nothing in $\operatorname{say}$ can emit it. Note where the fusion
 lives — in the speller, where it cannot reach a value.
 
-## The double life of `na` costs nothing
+### The double life of `na` costs nothing
 
 The digit 4 and the additive linker are the same syllable. Call that an
 accidental homonymy and move on, and you have conceded more than you need to:
@@ -784,7 +831,7 @@ makes, and it is the sort of claim that is very easy to believe wrongly.
 > language ought to have a reader stricter than its speakers is not a question
 > six equations can answer.
 
-## The corpus as a test suite
+### The corpus as a test suite
 
 A grammar that compiles is not yet a grammar worth having; $\text{False} \to
 \text{anything}$ compiles too. So every attested word is written out as a tree
@@ -802,7 +849,7 @@ length both worth 46, and likewise `kasate` and `yunalo` for 71. It is a small
 satisfaction to have the flaw in a twelfth-century exercise recorded as a
 theorem.
 
-## What formalising it exposes
+### What formalising it exposes
 
 **Syntax is not semantics.** `kasatu` and `yunayu` are different trees that
 $\operatorname{val}$ sends to the same 143, and `penasu` and `misana` both to
@@ -860,7 +907,12 @@ The question worth asking is about forms without padding, or about a canonical
 shortest spelling. Which turns out to be the thread that unravels the rest of
 the system.
 
-## Can Talemi name every number?
+## What the system does
+
+The library is not an ornament on the reconstruction. It is where the
+reconstruction starts answering questions the manuscript did not ask.
+
+### Can Talemi name every number?
 
 The corpus gives twenty-odd words and stops. That leaves open whether Talemi is
 a notation for arithmetic at all, or a list of number names that happens to run
@@ -886,10 +938,11 @@ anything that is at least twelve.
 > its value is $n$. If $n \ge 12$ then
 > $$
 > \begin{aligned}
-> \operatorname{val}(\operatorname{enc}(n))
->   &= (n \bmod 12)
+> &\operatorname{val}(\operatorname{enc}(n)) \\
+> &\quad= (n \bmod 12)
 >      + 12 \operatorname{val}(\operatorname{enc}(\lfloor n/12 \rfloor)) \\
->   &= (n \bmod 12) + 12 \lfloor n/12 \rfloor \;=\; n,
+> &\quad= (n \bmod 12) + 12 \lfloor n/12 \rfloor \\
+> &\quad= n,
 > \end{aligned}
 > $$
 > the middle step by the induction hypothesis and the last by division with
@@ -906,7 +959,7 @@ and eleven, which is precisely the range the additive linker covers, so `sa` is
 never reached — not as an optimisation, but because there is never an occasion
 for it.
 
-## What the subtractive linker is for
+### What the subtractive linker is for
 
 If `na` alone names every natural number, then `sa` adds nothing above zero. It
 does add something, and the formal statement says exactly what.
@@ -967,7 +1020,7 @@ manuscript `sa` appears five times, and every one of those five words is a
 positive number — `kasasu` is 35 and could equally have been `yunami`. The one
 job only `sa` can do is a job the monk never asks it to do.
 
-## Nor does it save breath
+### Nor does it save breath
 
 The remaining defence of the subtractive linker is economy. Roman numerals
 subtract for exactly that reason: `IX` spends two characters where `VIIII`
@@ -986,9 +1039,11 @@ The proof turns on a single function. Let $\operatorname{cap}(k)$ be the
 largest value any word of $k$ syllables can denote:
 
 $$
-\operatorname{cap}(0) = -1, \qquad
-\operatorname{cap}(1) = 12, \qquad
-\operatorname{cap}(2) = 23,
+\begin{aligned}
+\operatorname{cap}(0) &= -1, \\
+\operatorname{cap}(1) &= 12, \\
+\operatorname{cap}(2) &= 23,
+\end{aligned}
 $$
 
 $$
@@ -1021,13 +1076,21 @@ The theorem is then two inductions that meet in the middle.
 > one syllable, so write $\operatorname{len} M = m + 1$ and
 > $\operatorname{len} N = m + 3$. If the rung is additive,
 > $$
-> \operatorname{val}(N) = d + 12\operatorname{val}(M)
->   \le 11 + 12 \operatorname{cap}(m+1) = \operatorname{cap}(m+3),
+> \begin{aligned}
+> \operatorname{val}(N)
+>   &= d + 12\operatorname{val}(M) \\
+>   &\le 11 + 12 \operatorname{cap}(m+1) \\
+>   &= \operatorname{cap}(m+3),
+> \end{aligned}
 > $$
 > using the induction hypothesis and the recurrence. If it is subtractive,
 > $$
-> \operatorname{val}(N) = 12\operatorname{val}(M) - d
->   \le 12 \operatorname{cap}(m+1) \le \operatorname{cap}(m+3),
+> \begin{aligned}
+> \operatorname{val}(N)
+>   &= 12\operatorname{val}(M) - d \\
+>   &\le 12 \operatorname{cap}(m+1) \\
+>   &\le \operatorname{cap}(m+3),
+> \end{aligned}
 > $$
 > because $d \ge 0$. This is where the claim earns its keep: the same ceiling
 > holds either way, so subtraction buys no extra reach at any length.
@@ -1059,7 +1122,7 @@ The theorem is then two inductions that meet in the middle.
 So subtraction in Talemi is not the subtraction of Roman numerals. It reaches
 no new number and shortens no old one.
 
-## Where uniqueness comes from
+### Where uniqueness comes from
 
 What subtraction does do is create ties. `kasasu` and `yunami` are both 35,
 both three syllables, and neither can be improved on.
@@ -1145,9 +1208,12 @@ The reason is one line of the ceiling argument, read the other way round.
 > As before $k = 2 + \operatorname{len} M$, so with
 > $\operatorname{len} M = m+1$ we have $k = m+3$. Then
 > $$
-> \operatorname{val}(N) = 12\operatorname{val}(M) - d
->   \le 12\operatorname{cap}(m+1)
->    = \operatorname{cap}(m+3) - 11,
+> \begin{aligned}
+> \operatorname{val}(N)
+>   &= 12\operatorname{val}(M) - d \\
+>   &\le 12\operatorname{cap}(m+1) \\
+>   &= \operatorname{cap}(m+3) - 11,
+> \end{aligned}
 > $$
 > the inequality because $d \ge 0$ and $\operatorname{val}(M) \le
 > \operatorname{cap}(m+1)$, and the last step by the recurrence
@@ -1162,9 +1228,12 @@ The reason is one line of the ceiling argument, read the other way round.
 > $m+1$ syllables, so $N$ is $m+3$. The inductive hypothesis gives
 > $\operatorname{val}(M) \le \operatorname{cap}(m+1) - 11$, and therefore
 > $$
-> \operatorname{val}(N) = d + 12\operatorname{val}(M)
->   \le 11 + 12\bigl(\operatorname{cap}(m+1) - 11\bigr)
->    = \operatorname{cap}(m+3) - 132.
+> \begin{aligned}
+> \operatorname{val}(N)
+>   &= d + 12\operatorname{val}(M) \\
+>   &\le 11 + 12\bigl(\operatorname{cap}(m+1) - 11\bigr) \\
+>   &= \operatorname{cap}(m+3) - 132.
+> \end{aligned}
 > $$
 > Burying the subtraction costs more than leaving it on top: the rung above
 > multiplies the shortfall by twelve while handing back at most eleven. So the
@@ -1210,11 +1279,18 @@ the place where its signed digits cannot reach.
 ## The reconstruction
 
 ```text
-o  = 0     lo = 5      pe = 10
-ka = 1     te = 6      yu = 11
-mi = 2     ri = 7
-su = 3     vo = 8
-na = 4     ze = 9
+o  = 0
+ka = 1
+mi = 2
+su = 3
+na = 4
+lo = 5
+te = 6
+ri = 7
+vo = 8
+ze = 9
+pe = 10
+yu = 11
 ```
 
 Two constructions, $\eqref{eq:add}$ and $\eqref{eq:sub}$, recursive in $N$,

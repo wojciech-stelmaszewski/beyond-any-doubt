@@ -17,7 +17,11 @@ For $\operatorname{Re}(s) > 1$,
 
 $$
 \begin{equation}\label{eq:euler-product}
-\zeta(s) = \sum_{n=1}^{\infty} \frac{1}{n^{s}} = \prod_{p\ \mathrm{prime}} \frac{1}{1 - p^{-s}}.
+\begin{aligned}
+\zeta(s)
+  &= \sum_{n=1}^{\infty} \frac{1}{n^{s}} \\
+  &= \prod_{p\ \mathrm{prime}} \frac{1}{1 - p^{-s}}.
+\end{aligned}
 \end{equation}
 $$
 

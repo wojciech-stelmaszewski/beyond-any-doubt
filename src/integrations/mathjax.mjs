@@ -4,7 +4,8 @@ import { fileURLToPath } from "node:url";
 
 /**
  * Typesets maths after the static HTML has been generated. Running per finished
- * page (rather than per expression) is what makes \eqref work.
+ * page (rather than per expression) is what makes \eqref work. Dev uses the
+ * same pass from `src/middleware.js`, because this hook never runs there.
  */
 export function mathjaxIntegration() {
   return {

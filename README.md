@@ -1,6 +1,6 @@
 # Beyond Any Doubt
 
-Advanced mathematics, worked through in full — [beyond-any-doubt.org](https://beyond-any-doubt.org).
+It's the mathematics, stupid! — [beyond-any-doubt.org](https://beyond-any-doubt.org).
 
 A static site built around two things that are usually afterthoughts: equations
 that are typeset properly, and figures you can actually turn and zoom. Both are

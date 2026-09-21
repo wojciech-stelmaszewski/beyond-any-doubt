@@ -2,6 +2,8 @@
 import { getCollection, render } from "astro:content";
 import type { GetStaticPaths } from "astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import { site } from "../../site";
 
 export const getStaticPaths = (async () => {
   const posts = await getCollection("posts", ({ data }) => !data.draft);
@@ -9,7 +11,7 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 
 const formatDate = (date: Date) =>
   date.toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" });
@@ -25,6 +27,7 @@ const formatDate = (date: Date) =>
     tags: post.data.tags,
   }}
 >
+  <p class="meta"><a href="/">← {site.name}</a></p>
   <article>
     <h1>{post.data.title}</h1>
     <p class="meta">
@@ -33,7 +36,12 @@ const formatDate = (date: Date) =>
       </time>
     </p>
     <hr />
-    <Content />
+    <div class="post-with-toc">
+      <TableOfContents headings={headings} />
+      <div class="post-prose">
+        <Content />
+      </div>
+    </div>
   </article>
   <hr />
   <p class="meta"><a href="/">← All posts</a></p>

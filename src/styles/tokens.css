@@ -66,6 +66,12 @@
   --step: 0.25rem;
 }
 
+@media (max-width: 40rem) {
+  :root {
+    --gutter: 1rem;
+  }
+}
+
 [data-theme="dark"] {
   color-scheme: dark;
 

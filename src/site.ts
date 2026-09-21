@@ -6,7 +6,7 @@
  */
 export const site = {
   name: "Beyond Any Doubt",
-  description: "Advanced mathematics, worked through in full.",
+  description: "It's the mathematics, stupid!",
   author: "Wojciech Stelmaszewski",
   /** Matches `site` in astro.config.mjs. */
   url: "https://beyond-any-doubt.org",

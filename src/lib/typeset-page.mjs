@@ -45,13 +45,10 @@ export async function typesetPage(html) {
   const doc = mathjax.document(html, {
     InputJax: new TeX({ packages: PACKAGES, tags: "ams" }),
     /*
-     * `displayOverflow: "scroll"` is what keeps a wide equation inside the
-     * column. MathJax's default is "overflow", under which it puts an inline
-     * min-width on the container so the box refuses to shrink — no amount of
-     * overflow-x in our own CSS helps, because the box really is that wide, and
-     * the whole page ends up scrolling sideways on a phone. In "scroll" mode
-     * MathJax drops that min-width itself and gives the equation its own
-     * scrollbar, leaving the expression intact rather than reflowing it.
+     * `scroll` drops the min-width that `overflow` pins on a wide equation
+     * (which is what used to shove the whole page sideways). Line-breaking
+     * is done in the source, at the relations: automatic breaks inside an
+     * `aligned` cell will split `cap(m+1)` after the plus.
      */
     OutputJax: new SVG({
       fontCache: "local",
